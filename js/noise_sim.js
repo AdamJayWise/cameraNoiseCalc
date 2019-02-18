@@ -1,6 +1,10 @@
 console.log('Noise Sim')
 
-var sensorChoices = ['Predefined Sensors','Ideal Sensor', 'Newton 970 EMCCD', 'Zyla 5.5']
+var sensorChoices = ['Predefined Sensors',
+                    'Ideal Sensor', 
+                    'Newton 970 EMCCD', 
+                    'Zyla 5.5',
+                    'Sona 4.2 ']
 
 var sensorDefinitions = {
     'Ideal Sensor' : {
@@ -38,13 +42,30 @@ var sensorDefinitions = {
         color : 'blue',
         dashArray : '0'
     },
+
+    'Sona 4.2' : {
+        name : 'Sona 4.2',
+        iDark : 0.4,
+        readNoise : 1.6,
+        enf : 1,
+        qe : 0.95,
+        tExp : 1,
+        pixelSize : 25,
+        color : 'purple',
+        dashArray : '0'
+    },
 }
 
 function Chart(paramObj){
 
+    var self = this;
+
     if (!paramObj){
-        paramObj = {canvasWidth : 600, canvasHeight : 300, canvasMargin : 70};
+        paramObj = {canvasWidth : 600, canvasHeight : 300, canvasMargin : 70, tExp : 1};
     }
+
+    // plot parameters
+    this.tExp = paramObj.tExp;
 
     this.svg = d3.select('body')
         .append('svg')
@@ -72,7 +93,7 @@ function Chart(paramObj){
 
     // generate scales and axes including formatting
     this.xScale = d3.scaleLog()
-                    .domain([1,1000])
+                    .domain([1,200])
                     .range([paramObj.canvasMargin, paramObj.canvasWidth-paramObj.canvasMargin])
 
     this.yScale = d3.scaleLog()
@@ -120,6 +141,17 @@ function Chart(paramObj){
         .append('g').attr('id','xAxis')
         .attr('transform',`translate(0,${paramObj.canvasHeight-paramObj.canvasMargin/1.5})`)
         .call(this.xAxis)
+
+    var expInput = d3.select('body')
+        .append('p')
+        .html('&nbsp; Texp, s : ')
+        .append('input')
+        .attr('id','texp')
+        .attr('value',1)
+        .on('input', function(){
+            self.tExp = this.value;
+            self.draw()
+        })
     
 } 
 
@@ -141,13 +173,11 @@ function Trace(paramObj){
 
 
     //object of parameters to change and printable names
-    controlParams = {
+    var controlParams = {
                      iDark:'Dark Current, e/pix/s',
                      readNoise : 'Read Noise, e',
                      enf : 'ENF',
                      qe : 'QE',
-                     tExp : 'Exposure, s',
-                     pixelSize : 'Pixel Size, um',
                      }
 
     var self = this;
@@ -174,7 +204,7 @@ function Trace(paramObj){
         .style('border','1px solid black')
         .style('display', 'inline-block')
         .style('padding', '5px')
-        .style('margin','5px')
+        .style('margin','0')
         .style('font-size','10pt')
         .style('font-weight', 800)
     
@@ -186,7 +216,12 @@ function Trace(paramObj){
             .style('height', 20)
             .html('&nbsp;')
 
-    this.panel.append('p').text(this.name).attr('text-align','center')
+    var nameBadge = this.panel
+            .append('p')
+            .text(this.name)
+            .style('text-align','center')
+            .style('font-size','12pt')
+            .style('margin','0')
 
         
     // append Ps for each controllable parameter
@@ -196,27 +231,30 @@ function Trace(paramObj){
         .forEach(function(l){
             self.panel
                 .append('p')
+                .style('margin','5px 0 0 0 ')
                 .classed('controlP', true)
                 .attr('param',l)
                 .text( controlParams[l] + ' : ' + self[l])
                 
             var p = self.panel.append('div')
 
-            p.append('button')
-            .text('+')
-            .on('click', function(){
-                        self[l] += 0.3;
-                        mainChart.draw();
-                        self.updatePanel();
-                        })
-            
-            p.append('button')
-            .text('-')
-            .on('click', function(){
-                        self[l] -= 0.3;
-                        mainChart.draw();
-                        self.updatePanel();
-                        })
+            if (self.name == 'Custom Sensor'){
+                p.append('button')
+                .text('+')
+                .on('click', function(){
+                            self[l] += 0.3;
+                            mainChart.draw();
+                            self.updatePanel();
+                            })
+                
+                p.append('button')
+                .text('-')
+                .on('click', function(){
+                            self[l] -= 0.3;
+                            mainChart.draw();
+                            self.updatePanel();
+                            })
+            }
         
         })
     
@@ -249,18 +287,19 @@ function Trace(paramObj){
     // method to update control panel figures
     this.updatePanel = function(){
         colorBadge.style('background-color', self.color);
+        nameBadge.text(self.name)
         self.panel.selectAll('.controlP').each( function(l,j){ 
             var newParam = d3.select(this).attr('param');
-            d3.select(this).text(controlParams[newParam] + ' : ' + self[newParam])
+            d3.select(this).text(controlParams[newParam] + ' : ' + Math.round(100*self[newParam]) / 100)
         } );
     }
 
     // method to draw trace to graph
     this.draw = function(){
-        var xAxisPhotons = range(1,10).concat(range(11,1000,10));
+        var xAxisPhotons = range(1,10).concat(range(11,200,10));
         var yAxisSN = xAxisPhotons.map( function(val){
             var signal = self.qe * val;
-            var noise = self.enf * Math.sqrt( self.qe*val + self.readNoise**2 + self.iDark )
+            var noise = self.enf * Math.sqrt( self.qe*val + self.readNoise**2 + self.chart.tExp*self.iDark )
             return signal / noise
         })
 
@@ -281,15 +320,17 @@ function Trace(paramObj){
 
 var mainChart = new Chart()
 
-
-d3.select('body')
+var controlDiv = d3.select('body')
     .append('div')
     .style('width','100%')
-    .append('button')
+    .style('margin','10px')
+    .attr('id','controlDiv')
+
+controlDiv.append('button')
     .text('Add Sensor')
     .on('click',function(){
     var t = new Trace({
-        name : 'Bad Sensor',
+        name : 'Custom Sensor',
         iDark : 0,
         readNoise : 5,
         enf : 1,
@@ -303,8 +344,10 @@ d3.select('body')
     mainChart.draw()
     })
 
+
+
 var t = new Trace({
-    name : 'Ideal Sensor',
+    name : 'Custom Sensor',
     iDark : 0,
     readNoise : 0,
     enf : 1,
