@@ -108,7 +108,7 @@ function Chart(paramObj){
     var self = this;
 
     if (!paramObj){
-        paramObj = {canvasWidth : screen.width*0.9, canvasHeight : 400, canvasMargin : 70, tExp : 1};
+        paramObj = {canvasWidth : 900, canvasHeight : 400, canvasMargin : 70, tExp : 1};
     }
 
     // plot parameters
@@ -244,7 +244,7 @@ function Trace(paramObj){
         .style('border','1px solid black')
         .style('display', 'inline-block')
         .style('padding', '5px')
-        .style('margin','0')
+        .style('margin','2px')
         .style('font-size','10pt')
         .style('font-weight', 800)
     
