@@ -1,9 +1,11 @@
 console.log('Noise Sim')
 
 var sensorChoices = ['Predefined Sensors',
-                    'Ideal Sensor', 
+                    'Ideal Sensor',
+                    'Newton 940 CCD',
                     'Newton 970 EMCCD', 
                     'Zyla 5.5',
+                    'Zyla 4.2 Plus',
                     'Sona 4.2 ']
 
 var sensorDefinitions = {
@@ -31,6 +33,18 @@ var sensorDefinitions = {
         dashArray : '0'
     },
 
+    'Zyla 4.2 Plus' : {
+        name : 'Zyla 4.2 Plus',
+        iDark : 0.1,
+        readNoise : 0.9,
+        enf : 1,
+        qe : 0.82,
+        tExp : 1,
+        pixelSize : 6.5,
+        color : 'orange',
+        dashArray : '0'
+    },
+
     'Newton 970 EMCCD' : {
         name : 'Newton 970 EMCCD',
         iDark : 0.0007,
@@ -40,6 +54,18 @@ var sensorDefinitions = {
         tExp : 1,
         pixelSize : 25,
         color : 'blue',
+        dashArray : '0'
+    },
+
+    'Newton 940 CCD' : {
+        name : 'Newton 940 CCD',
+        iDark : 0.00001,
+        readNoise : 2.5,
+        enf : 1,
+        qe : 0.95,
+        tExp : 1,
+        pixelSize : 25,
+        color : 'red',
         dashArray : '0'
     },
 
@@ -56,12 +82,33 @@ var sensorDefinitions = {
     },
 }
 
+// build a d3 scale for each parameter to clamp legal values
+var paramBounds = { qe : [0.1,1],
+               iDark : [0,100],
+               readNoise : [0, 100],
+               enf : [1,3.5] }
+
+paramScales = {};
+
+Object.keys(paramBounds).forEach(function(key){
+    paramScales[key] = d3.scaleLinear()
+                        .domain(paramBounds[key])
+                        .range(paramBounds[key])
+                        .clamp(true) 
+})
+
+// define steps for changing parameters
+var paramStep = { qe : 0.05,
+    iDark : 0.01,
+    readNoise : 0.1,
+    enf : 0.1 }
+
 function Chart(paramObj){
 
     var self = this;
 
     if (!paramObj){
-        paramObj = {canvasWidth : 600, canvasHeight : 300, canvasMargin : 70, tExp : 1};
+        paramObj = {canvasWidth : 600, canvasHeight : 400, canvasMargin : 70, tExp : 1};
     }
 
     // plot parameters
@@ -72,15 +119,6 @@ function Chart(paramObj){
         .attr('width', paramObj.canvasWidth)
         .attr('height', paramObj.canvasHeight)
     
-    this.svg
-        .append('rect')
-        .attr('x',0)
-        .attr('y',0)
-        .attr('width', paramObj.canvasWidth)
-        .attr('height', paramObj.canvasHeight)
-        .attr('stroke','black')
-        .attr('fill','none')
-
     this.traces = []
 
     this.draw = function(){
@@ -97,7 +135,7 @@ function Chart(paramObj){
                     .range([paramObj.canvasMargin, paramObj.canvasWidth-paramObj.canvasMargin])
 
     this.yScale = d3.scaleLog()
-                    .domain([0.1,40])//.domain([Math.min(...yAxisSN),Math.max(...yAxisSN)])
+                    .domain([0.1,20])//.domain([Math.min(...yAxisSN),Math.max(...yAxisSN)])
                     .range([paramObj.canvasHeight-paramObj.canvasMargin, paramObj.canvasMargin])
 
     this.dataLine = d3.line()
@@ -111,7 +149,7 @@ function Chart(paramObj){
 
     this.yAxis = d3.axisLeft()
                     .scale(this.yScale)
-                    .tickValues([0.1,1,2,10,40])
+                    .tickValues([0.1,1,2,5,10,20])
                     .tickFormat(d=>d);
     
        // add x axis label
@@ -143,8 +181,8 @@ function Chart(paramObj){
         .call(this.xAxis)
 
     var expInput = d3.select('body')
-        .append('p')
-        .html('&nbsp; Texp, s : ')
+        .append('div')
+        .html('&nbsp; Exposure Time, s : ')
         .append('input')
         .attr('id','texp')
         .attr('value',1)
@@ -230,7 +268,7 @@ function Trace(paramObj){
     Object.keys(controlParams)
         .forEach(function(l){
             self.panel
-                .append('p')
+                .append('div')
                 .style('margin','5px 0 0 0 ')
                 .classed('controlP', true)
                 .attr('param',l)
@@ -242,7 +280,7 @@ function Trace(paramObj){
                 p.append('button')
                 .text('+')
                 .on('click', function(){
-                            self[l] += 0.3;
+                            self[l] = paramScales[l](self[l] + paramStep[l]);
                             mainChart.draw();
                             self.updatePanel();
                             })
@@ -250,7 +288,7 @@ function Trace(paramObj){
                 p.append('button')
                 .text('-')
                 .on('click', function(){
-                            self[l] -= 0.3;
+                            self[l] = paramScales[l](self[l] - paramStep[l]);
                             mainChart.draw();
                             self.updatePanel();
                             })
@@ -311,6 +349,7 @@ function Trace(paramObj){
             .attr('d', this.chart.dataLine(dataObj))
             .attr('stroke', self.color)
             .attr('stroke-dasharray', self.dashArray)
+            .attr('stroke-width',2)
 
     }
 
@@ -322,7 +361,6 @@ var mainChart = new Chart()
 
 var controlDiv = d3.select('body')
     .append('div')
-    .style('width','100%')
     .style('margin','10px')
     .attr('id','controlDiv')
 
