@@ -2,7 +2,7 @@ console.log('Noise Sim')
 
 var sensorChoices = ['Predefined Sensors',
                     'Ideal Sensor',
-                    'Newton 940 CCD',
+                    'Newton DU940P CCD',
                     'Newton 970 EMCCD', 
                     'Zyla 5.5',
                     'Zyla 4.2 Plus',
@@ -57,8 +57,8 @@ var sensorDefinitions = {
         dashArray : '0'
     },
 
-    'Newton 940 CCD' : {
-        name : 'Newton 940 CCD',
+    'Newton DU940P CCD' : {
+        name : 'Newton DU940P CCD',
         iDark : 0.00001,
         readNoise : 2.5,
         enf : 1,
@@ -160,7 +160,7 @@ function Chart(paramObj){
        .text('Photons / Pixel')
        .attr('fill','black')
        .attr('x',paramObj.canvasWidth/2)
-       .attr('y', paramObj.canvasHeight-paramObj.canvasMargin/5)
+       .attr('y', paramObj.canvasHeight-paramObj.canvasMargin/8)
        .style('text-anchor','middle')
 
     // add y axis label
@@ -182,16 +182,44 @@ function Chart(paramObj){
         .attr('transform',`translate(0,${paramObj.canvasHeight-paramObj.canvasMargin/1.5})`)
         .call(this.xAxis)
 
-    var expInput = d3.select('body')
+    var controlDiv = d3.select('body')
         .append('div')
+        .style('margin','5px')
+        .attr('id','controlDiv')
+    
+    
+    controlDiv
+        .append('span')
         .html('&nbsp; Exposure Time, s : ')
         .append('input')
+        .style('width','25px')
         .attr('id','texp')
         .attr('value',1)
         .on('input', function(){
             self.tExp = this.value;
             self.draw()
         })
+
+    controlDiv
+        .append('button')
+        .style('margin','0 0 0 10px')
+        .text('Add Sensor')
+        .on('click',function(){
+        var t = new Trace({
+            name : 'Custom Sensor',
+            iDark : 0,
+            readNoise : 5,
+            enf : 1,
+            qe : 1,
+            tExp : 1,
+            pixelSize : 25,
+            chart : mainChart,
+            dashArray : 0,
+            color : randColor()
+        });
+        mainChart.draw()
+        })
+
     
 } 
 
@@ -253,7 +281,7 @@ function Trace(paramObj){
             .append('div')
             .style('background-color', this.color)
             .style('width', 20)
-            .style('height', 20)
+            .style('height', '8px')
             .html('&nbsp;')
 
     var nameBadge = this.panel
@@ -361,28 +389,7 @@ function Trace(paramObj){
 
 var mainChart = new Chart()
 
-var controlDiv = d3.select('body')
-    .append('div')
-    .style('margin','10px')
-    .attr('id','controlDiv')
 
-controlDiv.append('button')
-    .text('Add Sensor')
-    .on('click',function(){
-    var t = new Trace({
-        name : 'Custom Sensor',
-        iDark : 0,
-        readNoise : 5,
-        enf : 1,
-        qe : 1,
-        tExp : 1,
-        pixelSize : 25,
-        chart : mainChart,
-        dashArray : 0,
-        color : randColor()
-    });
-    mainChart.draw()
-    })
 
 
 
