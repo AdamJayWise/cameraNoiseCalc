@@ -108,13 +108,15 @@ function Chart(paramObj){
     var self = this;
 
     if (!paramObj){
-        paramObj = {canvasWidth : 600, canvasHeight : 400, canvasMargin : 70, tExp : 1};
+        paramObj = {canvasWidth : screen.width*0.9, canvasHeight : 400, canvasMargin : 70, tExp : 1};
     }
 
     // plot parameters
     this.tExp = paramObj.tExp;
 
     this.svg = d3.select('body')
+        .append('div')
+        .style('text-align','center')
         .append('svg')
         .attr('width', paramObj.canvasWidth)
         .attr('height', paramObj.canvasHeight)
