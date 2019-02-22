@@ -1,86 +1,8 @@
 console.log('Noise Sim')
 
-var sensorChoices = ['Predefined Sensors',
-                    'Ideal Sensor',
-                    'Newton DU940P CCD',
-                    'Newton 970 EMCCD', 
-                    'Zyla 5.5',
-                    'Zyla 4.2 Plus',
-                    'Sona 4.2 ']
 
-var sensorDefinitions = {
-    'Ideal Sensor' : {
-        name : 'Ideal Sensor',
-        iDark : 0,
-        readNoise : 0,
-        enf : 1,
-        qe : 1,
-        tExp : 1,
-        pixelSize : 25,
-        color : 'black',
-        dashArray : 4
-    },
-
-    'Zyla 5.5' : {
-        name : 'Zyla 5.5',
-        iDark : 0.1,
-        readNoise : 0.9,
-        enf : 1,
-        qe : 0.6,
-        tExp : 1,
-        pixelSize : 25,
-        color : 'green',
-        dashArray : '0'
-    },
-
-    'Zyla 4.2 Plus' : {
-        name : 'Zyla 4.2 Plus',
-        iDark : 0.1,
-        readNoise : 0.9,
-        enf : 1,
-        qe : 0.82,
-        tExp : 1,
-        pixelSize : 6.5,
-        color : 'orange',
-        dashArray : '0'
-    },
-
-    'Newton 970 EMCCD' : {
-        name : 'Newton 970 EMCCD',
-        iDark : 0.0007,
-        readNoise : 0,
-        enf : 1.2,
-        qe : 0.95,
-        tExp : 1,
-        pixelSize : 25,
-        color : 'blue',
-        dashArray : '0'
-    },
-
-    'Newton DU940P CCD' : {
-        name : 'Newton DU940P CCD',
-        iDark : 0.00001,
-        readNoise : 2.5,
-        enf : 1,
-        qe : 0.95,
-        tExp : 1,
-        pixelSize : 25,
-        color : 'red',
-        dashArray : '0'
-    },
-
-    'Sona 4.2' : {
-        name : 'Sona 4.2',
-        iDark : 0.4,
-        readNoise : 1.6,
-        enf : 1,
-        qe : 0.95,
-        tExp : 1,
-        pixelSize : 25,
-        color : 'purple',
-        dashArray : '0'
-    },
-}
+// sensorChoices is an object read in from a separate js file... I could have planned this better
+var sensorChoices = Object.keys(sensorDefinitions);
 
 // build a d3 scale for each parameter to clamp legal values
 var paramBounds = { qe : [0.1,1],
@@ -97,19 +19,27 @@ Object.keys(paramBounds).forEach(function(key){
                         .clamp(true) 
 })
 
-// define steps for changing parameters
+// define steps for changing parameters with the little +/- buttons
 var paramStep = { qe : 0.05,
     iDark : 0.01,
     readNoise : 0.1,
     enf : 0.1 }
 
+// create a chart class to mananage plotting
 function Chart(paramObj){
 
     var self = this;
 
     if (!paramObj){
-        paramObj = {canvasWidth : 900, canvasHeight : 400, canvasMargin : 70, tExp : 1};
+        paramObj = {canvasWidth : 900,
+                    canvasHeight : 400,
+                    canvasMargin : 50,
+                    tExp : 1,
+                    yTicks : [0.2,1,2,5,10,20],
+                    xTicks : [1,10,100,1000] };
     }
+
+   Object.keys(paramObj).forEach(function(k){self[k]=paramObj[k]})
 
     // plot parameters
     this.tExp = paramObj.tExp;
@@ -124,43 +54,95 @@ function Chart(paramObj){
     this.traces = []
 
     this.draw = function(){
+        
+        this.traces.forEach(e=>e.update())
+
+        var maxY = Math.max(...this.yTicks)
+        var minY = Math.min(...this.yTicks)
+        if (this.traces[0].yAxisSN){
+            maxY = Math.max(...self.traces.map(function(item){return item.yAxisSN.slice(-1)[0]}))
+            minY = Math.min(...self.traces.map(function(item){return item.yAxisSN[0]}))
+
+        }
+        self.yTicks[0] = Math.floor(minY*100)/100
+        self.yTicks[self.yTicks.length-1] = Math.ceil(maxY)
+
+        this.updateAxes();
         this.traces.forEach(e=>e.draw())
+
     }
 
     this.update = function(){
         this.traces.forEach(e=>e.update())
     }
 
+    this.updateAxes = function() {
+        d3.selectAll('.axis').remove()
     // generate scales and axes including formatting
-    this.xScale = d3.scaleLog()
-                    .domain([1,200])
-                    .range([paramObj.canvasMargin, paramObj.canvasWidth-paramObj.canvasMargin])
+        self.xScale = d3.scaleLog()
+                        .domain([self.xTicks.slice(0)[0], self.xTicks.slice(-1)[0]])
+                        .range([self.canvasMargin, self.canvasWidth-self.canvasMargin])
 
-    this.yScale = d3.scaleLog()
-                    .domain([0.1,20])//.domain([Math.min(...yAxisSN),Math.max(...yAxisSN)])
-                    .range([paramObj.canvasHeight-paramObj.canvasMargin, paramObj.canvasMargin])
+        self.yScale = d3.scaleLog()
+                        .domain([self.yTicks.slice(0)[0], self.yTicks.slice(-1)[0]])
+                        .range([self.canvasHeight-self.canvasMargin, self.canvasMargin])
 
-    this.dataLine = d3.line()
-                    .x(d=>this.xScale(d.x))
-                    .y(d=>this.yScale(d.y))
+        self.dataLine = d3.line()
+                        .x(d=>self.xScale(d.x))
+                        .y(d=>self.yScale(d.y))
 
-    this.xAxis = d3.axisBottom()
-                    .scale(this.xScale)
-                    .tickValues([1,10,100,1000])
-                    .tickFormat(d=>d);
+        self.xAxis = d3.axisBottom()
+                        .scale(self.xScale)
+                        .tickValues( self.xTicks )
+                        .tickFormat(d=>d);
 
-    this.yAxis = d3.axisLeft()
-                    .scale(this.yScale)
-                    .tickValues([0.1,1,2,5,10,20])
-                    .tickFormat(d=>d);
-    
+        self.yAxis = d3.axisLeft()
+                        .scale(self.yScale)
+                        .tickValues( self.yTicks )
+                        .tickFormat(d=>d);
+
+        self.svg
+                .append('g')
+                .classed('axis',true)
+                .attr('id','yAxis')
+                .attr('transform',`translate(${self.xScale(self.xTicks[0])-2},0)`)
+                .call(self.yAxis)
+                .style('font-size',13)
+                            
+        self.svg
+                .append('g')
+                .classed('axis',true)
+                .attr('id','xAxis')
+                .attr('transform',`translate(0,${self.yScale(self.yTicks[0])-2})`)
+                .call(self.xAxis)
+                .style('font-size',13)
+
+                for (var i = 0;  i < self.yTicks.length-1; i++ ){
+
+                    self.svg.append('rect')
+                        .classed('axis',true)
+                        .attr('x', self.xScale(self.xTicks[0]))
+                        .attr('y', self.yScale(self.yTicks[i+1])+2)
+                        .attr('width',  self.xScale( self.xTicks.slice(-1)[0]) -self.xScale( self.xTicks[0]) )
+                        .attr('height', self.yScale(self.yTicks[i]) - self.yScale(self.yTicks[i+1]) - 2)
+                        .attr('fill','rgba(0,0,0,.1')
+                        .attr('stroke-width','2')
+                }
+            
+                for (var i = 0;  i < self.xTicks.length; i++ ){
+            
+                }   
+    }
+
+    self.updateAxes();
+
        // add x axis label
     this.svg
        .append('text')
        .text('Photons / Pixel')
        .attr('fill','black')
-       .attr('x',paramObj.canvasWidth/2)
-       .attr('y', paramObj.canvasHeight-paramObj.canvasMargin/8)
+       .attr('x',self.canvasWidth/2)
+       .attr('y', self.canvasHeight-self.canvasMargin/8)
        .style('text-anchor','middle')
 
     // add y axis label
@@ -169,24 +151,13 @@ function Chart(paramObj){
        .text('Signal / Noise Ratio')
        .attr('fill','black')
        .style('text-anchor','middle')
-       .attr('transform', `translate(${paramObj.canvasMargin/3},${paramObj.canvasHeight/2}) rotate(-90)`)
+       .attr('transform', `translate(${self.canvasMargin/3},${self.canvasHeight/2}) rotate(-90)`)
 
-    this.svg
-        .append('g')
-        .attr('id','yAxis')
-        .attr('transform',`translate(${paramObj.canvasMargin/1.5},0)`)
-        .call(this.yAxis);
-            
-    this.svg
-        .append('g').attr('id','xAxis')
-        .attr('transform',`translate(0,${paramObj.canvasHeight-paramObj.canvasMargin/1.5})`)
-        .call(this.xAxis)
-
+    // add additional controls to chart
     var controlDiv = d3.select('body')
         .append('div')
         .style('margin','5px')
         .attr('id','controlDiv')
-    
     
     controlDiv
         .append('span')
@@ -292,9 +263,7 @@ function Trace(paramObj){
             .style('margin','0')
 
         
-    // append Ps for each controllable parameter
-    
-    
+    // append ui elements for each controllable parameter
     Object.keys(controlParams)
         .forEach(function(l){
             self.panel
@@ -326,12 +295,14 @@ function Trace(paramObj){
         
         })
     
+    // add a pull-down UI element to allow choosing from pre-defined sensors
     var select = self.panel
         .append('div')
-        .style('padding','10px 10px 0 0 ')
+        .style('padding', '10px 10px 0 0 ')
         .append('select')
-        .attr('class','select')
-        .on('change',onchange)
+        .attr('value', 'Pre-Defined Sensors')
+        .attr('class', 'select')
+        .on('change', onchange)
         
     var options = select
         .selectAll('option')
@@ -341,18 +312,19 @@ function Trace(paramObj){
     
     function onchange() {
             var selectValue = d3.select(this).property('value');
-            var newParams = sensorDefinitions[selectValue];
-            var keys = Object.keys(newParams);
-            for (var i in keys){
-                self[keys[i]] = newParams[keys[i]]
+            if (selectValue[0] !== '-'){
+                var newParams = sensorDefinitions[selectValue];
+                var keys = Object.keys(newParams);
+                for (var i in keys){
+                    self[keys[i]] = newParams[keys[i]]
+                }
+                self.updatePanel();
+                self.chart.draw();
             }
-            self.updatePanel();
-            self.chart.draw();
         };
 
-    
 
-    // method to update control panel figures
+    // method to update control panel display fields
     this.updatePanel = function(){
         colorBadge.style('background-color', self.color);
         nameBadge.text(self.name)
@@ -362,36 +334,33 @@ function Trace(paramObj){
         } );
     }
 
-    // method to draw trace to graph
-    this.draw = function(){
-        var xAxisPhotons = range(1,10).concat(range(11,200,10));
-        var yAxisSN = xAxisPhotons.map( function(val){
+    // update x and y data for the trace
+    this.update = function(){
+        var chartRangeX = d3.extent(self.chart.xTicks)
+        self.xAxisPhotons = range(chartRangeX[0],10).concat(range(11,chartRangeX[1],10));
+        self.yAxisSN = self.xAxisPhotons.map( function(val){
             var signal = self.qe * val;
             var noise = self.enf * Math.sqrt( self.qe*val + self.readNoise**2 + self.chart.tExp*self.iDark )
             return signal / noise
         })
+    }
 
+    // method to draw trace to graph
+    this.draw = function(){
         // "zip" the object from an object with arrays as properties to a list of objs with one number for each property...
-        var dataObj = {x : xAxisPhotons, y : yAxisSN };
+        var dataObj = {x : self.xAxisPhotons, y : self.yAxisSN };
         dataObj = objZip(dataObj)
-
         this.path
             .attr('d', this.chart.dataLine(dataObj))
             .attr('stroke', self.color)
             .attr('stroke-dasharray', self.dashArray)
             .attr('stroke-width',2)
-
     }
-
 }
 
 // ================================
 
 var mainChart = new Chart()
-
-
-
-
 
 var t = new Trace({
     name : 'Custom Sensor',
@@ -405,8 +374,6 @@ var t = new Trace({
     dashArray : 4,
     color : 'black'
 });
-
-
 
 mainChart.draw();
 
