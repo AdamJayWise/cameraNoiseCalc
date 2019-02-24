@@ -36,7 +36,7 @@ function Chart(paramObj){
                     canvasMargin : 50,
                     tExp : 1,
                     yTicks : [0.2,1,2,5,10,20],
-                    xTicks : [1,10,100,1000] };
+                    xTicks : [1,10,25,50,100,25,500,1000] };
     }
 
     // copy values from parameter object to self
@@ -44,6 +44,7 @@ function Chart(paramObj){
 
     // plot parameters ... more to here soon
     this.tExp = paramObj.tExp;
+    this.illuminationStyle = 'perPixel' // could also be perArea (13*13um)
     // ....
 
     this.svg = d3.select('#contentDiv')
@@ -82,7 +83,7 @@ function Chart(paramObj){
         var outputData = []
         var line = []
         var headings = this.traces.map(function(t){return t.name + ' S:N'})
-        headings.unshift('Photons per pixel')
+        headings.unshift('Photons')
         outputData.push(headings.join(','))
 
         for (var l = 0; l < this.traces[0].yAxisSN.length; l++){
@@ -176,6 +177,7 @@ function Chart(paramObj){
     // add x axis label
     this.svg
        .append('text')
+       .attr('id','xLabel')
        .text('Photons / Pixel')
        .attr('fill','black')
        .attr('x',self.canvasWidth/2)
@@ -229,13 +231,34 @@ function Chart(paramObj){
         })
 
     controlDiv
-        .append('span')
         .append('button')
         .style('margin','0 0 0 10px')
         .text('Download as CSV')
         .on('click', function(){self.downloadData.call(self)})
 
-    
+    controlDiv
+        .append('button')
+        .style('margin','0 0 0 10px')
+        .text('Plot as Photons / Pixel')
+        .on('click', function(){
+            self.illuminationStyle = 'perPixel';
+            d3.select('#xLabel').text('Photons/Pixel');
+            self.update();
+            self.draw();
+        })
+
+    controlDiv
+        .append('button')
+        .style('margin','0 0 0 10px')
+        .html('Plot as Photons / 13um<sup>2</sup>')
+        .on('click', function(){
+            self.illuminationStyle = 'perArea';
+            d3.select('#xLabel').html('Photons / 13um*13um Area');
+            self.update.call(self);
+            self.updateAxes.call(self)
+            self.draw.call(self);
+        })
+
 } 
 
 // create a trace object prototype to represent a single sensor
@@ -306,7 +329,6 @@ function Trace(paramObj){
             .style('font-size','12pt')
             .style('margin','0')
 
-        
     // append ui elements for each controllable parameter
     Object.keys(controlParams)
         .forEach(function(l){
@@ -336,7 +358,6 @@ function Trace(paramObj){
                             self.updatePanel();
                             })
             }
-        
         })
     
     // add a pull-down UI element to allow choosing from pre-defined sensors
@@ -350,9 +371,9 @@ function Trace(paramObj){
         
     var options = select
         .selectAll('option')
-          .data(sensorChoices).enter()
-          .append('option')
-              .text(function (d) { return d; });
+        .data(sensorChoices).enter()
+        .append('option')
+        .text(function (d) { return d; });
     
     function onchange() {
             var selectValue = d3.select(this).property('value');
@@ -383,8 +404,31 @@ function Trace(paramObj){
         var chartRangeX = d3.extent(self.chart.xTicks)
         self.xAxisPhotons = range(chartRangeX[0],10).concat(range(11,chartRangeX[1],10));
         self.yAxisSN = self.xAxisPhotons.map( function(val){
+        
+        var readNoise = self.readNoise;
+        var nPixels = 1;
+        var iDark = self.iDark;
+
+            if (self.chart.illuminationStyle == 'perPixel'){
+                val = val;
+                readNoise = readNoise;
+
+            }
+            
+            // if the chart is to be plotted with fixed illumination intensity,
+            //calculate parameters related to pixel size
+            if (self.chart.illuminationStyle == 'perArea'){
+                val = val
+                nPixels = (13**2)/(self.pixelSize**2);
+                if (self.type == 'scmos') {
+                    // if the camera is scmos, make the read noise stack
+                    readNoise = Math.sqrt( self.readNoise * nPixels )
+                }
+                iDark = ( self.iDark * nPixels )
+            }
+
             var signal = self.qe * val;
-            var noise = self.enf * Math.sqrt( self.qe*val + self.readNoise**2 + self.chart.tExp*self.iDark )
+            var noise = self.enf * Math.sqrt( self.qe*val + readNoise**2 + self.chart.tExp * iDark )
             return signal / noise
         })
     }
@@ -432,9 +476,9 @@ d3.select('body')
     .attr('id','footerDiv')
     .append('div')
     .html(`<p>Signal : Noise Calculation - Here, signal to noise is plotted as:</p>
-        <p>Signal = QE * n_photons </p>
-       <p>Noise = ENF * SQRT( QE * n_photons + ReadNoise<sup>2</sup> + Texp*Dark_Current )</p>
-       <p> Will replace this with a Tex or something ASAP to minimize ugliness </p>
+        <p>Signal = QE * n_photons <br>
+        Noise = ENF * SQRT( QE * n<sub>photons</sub> + ReadNoise<sup>2</sup> + T<sub>exp</sub>*I<sub>Dark</sub> )<br>
+        <sub>Will replace this with a Tex or something ASAP to minimize ugliness</sub> </p>
     `)
 
 
