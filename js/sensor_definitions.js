@@ -45,7 +45,7 @@
         "name" : "Newton 970 EMCCD",
         "iDark" : 0.0007,
         "readNoise" : 0,
-        "enf" : 1.2,
+        "enf" : 1.41,
         "qe" : 0.95,
         "tExp" : 1,
         "pixelSize" : 25,
@@ -62,6 +62,18 @@
         "tExp" : 1,
         "pixelSize" : 25,
         "color" : "red",
+        "dashArray" : "0"
+    },
+
+    "iXon Ultra EMCCD" : {
+        "name" : "iXon Ultra EMCCD",
+        "iDark" : 0.00025,
+        "readNoise" : 0,
+        "enf" : 1.41,
+        "qe" : 0.95,
+        "tExp" : 1,
+        "pixelSize" : 13,
+        "color" : "violet",
         "dashArray" : "0"
     },
 

@@ -1,5 +1,5 @@
 console.log('Noise Sim')
-
+d3.select('body').append('div').text('Signal : Noise Visualizer').style('text-align','center').style('font-size','20pt')
 
 // sensorChoices is an object read in from a separate js file... I could have planned this better
 var sensorChoices = Object.keys(sensorDefinitions);
@@ -39,12 +39,14 @@ function Chart(paramObj){
                     xTicks : [1,10,100,1000] };
     }
 
+    // copy values from parameter object to self
    Object.keys(paramObj).forEach(function(k){self[k]=paramObj[k]})
 
-    // plot parameters
+    // plot parameters ... more to here soon
     this.tExp = paramObj.tExp;
+    // ....
 
-    this.svg = d3.select('body')
+    this.svg = d3.select('#contentDiv')
         .append('div')
         .style('text-align','center')
         .append('svg')
@@ -53,29 +55,67 @@ function Chart(paramObj){
     
     this.traces = []
 
+    // method to draw traces onto the svg 
     this.draw = function(){
-        
         this.traces.forEach(e=>e.update())
-
         var maxY = Math.max(...this.yTicks)
         var minY = Math.min(...this.yTicks)
         if (this.traces[0].yAxisSN){
             maxY = Math.max(...self.traces.map(function(item){return item.yAxisSN.slice(-1)[0]}))
             minY = Math.min(...self.traces.map(function(item){return item.yAxisSN[0]}))
-
         }
         self.yTicks[0] = Math.floor(minY*100)/100
         self.yTicks[self.yTicks.length-1] = Math.ceil(maxY)
-
         this.updateAxes();
         this.traces.forEach(e=>e.draw())
-
     }
 
+    // method to update trace paths, reflecting new parameters
     this.update = function(){
         this.traces.forEach(e=>e.update())
     }
 
+    // a method to marshall data in each trace into an exportable CSV string 
+    this.getData = function(){
+        this.update();
+        var n = this.traces.length;
+        var outputData = []
+        var line = []
+        var headings = this.traces.map(function(t){return t.name + ' S:N'})
+        headings.unshift('Photons per pixel')
+        outputData.push(headings.join(','))
+
+        for (var l = 0; l < this.traces[0].yAxisSN.length; l++){
+        line = []
+            line.push(this.traces[0].xAxisPhotons[l])
+            for (var i = 0; i < n; i++){
+                line.push(this.traces[i].yAxisSN[l])
+            }   
+            outputData.push(line.join(','))
+        }
+        return outputData.join('\n')
+    }
+
+    //method to download data in the chart from the web page as csv
+    this.downloadData = function () {
+        var a = document.createElement('a');
+        var mimeType = 'application/octet-stream';
+        var data = this.getData();
+        var fileName = 'exported_data.csv'
+        
+        if (URL && 'download' in a) { 
+            a.href = URL.createObjectURL(new Blob([data], {
+              type: mimeType
+            }));
+            a.setAttribute('download', fileName);
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+         
+        }
+    }
+
+    // method to update axes 
     this.updateAxes = function() {
         d3.selectAll('.axis').remove()
     // generate scales and axes including formatting
@@ -85,7 +125,7 @@ function Chart(paramObj){
 
         self.yScale = d3.scaleLog()
                         .domain([self.yTicks.slice(0)[0], self.yTicks.slice(-1)[0]])
-                        .range([self.canvasHeight-self.canvasMargin, self.canvasMargin])
+                        .range([self.canvasHeight-self.canvasMargin, self.canvasMargin/5])
 
         self.dataLine = d3.line()
                         .x(d=>self.xScale(d.x))
@@ -117,8 +157,8 @@ function Chart(paramObj){
                 .call(self.xAxis)
                 .style('font-size',13)
 
+                // draw decorative rectangles to denote y axis divisions
                 for (var i = 0;  i < self.yTicks.length-1; i++ ){
-
                     self.svg.append('rect')
                         .classed('axis',true)
                         .attr('x', self.xScale(self.xTicks[0]))
@@ -128,15 +168,12 @@ function Chart(paramObj){
                         .attr('fill','rgba(0,0,0,.1')
                         .attr('stroke-width','2')
                 }
-            
-                for (var i = 0;  i < self.xTicks.length; i++ ){
-            
-                }   
     }
 
+    // initially draw the axes once
     self.updateAxes();
 
-       // add x axis label
+    // add x axis label
     this.svg
        .append('text')
        .text('Photons / Pixel')
@@ -154,7 +191,7 @@ function Chart(paramObj){
        .attr('transform', `translate(${self.canvasMargin/3},${self.canvasHeight/2}) rotate(-90)`)
 
     // add additional controls to chart
-    var controlDiv = d3.select('body')
+    var controlDiv = d3.select('#contentDiv')
         .append('div')
         .style('margin','5px')
         .attr('id','controlDiv')
@@ -163,7 +200,7 @@ function Chart(paramObj){
         .append('span')
         .html('&nbsp; Exposure Time, s : ')
         .append('input')
-        .style('width','25px')
+        .style('width','50px')
         .attr('id','texp')
         .attr('value',1)
         .on('input', function(){
@@ -191,9 +228,17 @@ function Chart(paramObj){
         mainChart.draw()
         })
 
+    controlDiv
+        .append('span')
+        .append('button')
+        .style('margin','0 0 0 10px')
+        .text('Download as CSV')
+        .on('click', function(){self.downloadData.call(self)})
+
     
 } 
 
+// create a trace object prototype to represent a single sensor
 function Trace(paramObj){
     
     if (!paramObj){
@@ -238,7 +283,7 @@ function Trace(paramObj){
         .attr('stroke-dasharray', this.dashArray)
 
     // create a control panel
-    this.panel = d3.select('body')
+    this.panel = d3.select('#contentDiv')
         .append('div')
         .style('border','1px solid black')
         .style('display', 'inline-block')
@@ -246,7 +291,6 @@ function Trace(paramObj){
         .style('margin','2px')
         .style('font-size','10pt')
         .style('font-weight', 800)
-    
     
     var colorBadge = this.panel
             .append('div')
@@ -360,6 +404,10 @@ function Trace(paramObj){
 
 // ================================
 
+d3.select('body')
+    .append('div')
+    .attr('id','contentDiv')
+
 var mainChart = new Chart()
 
 var t = new Trace({
@@ -378,7 +426,20 @@ var t = new Trace({
 mainChart.draw();
 
 
-//===========
+
+d3.select('body')
+    .append('div')
+    .attr('id','footerDiv')
+    .append('div')
+    .html(`<p>Signal : Noise Calculation - Here, signal to noise is plotted as:</p>
+        <p>Signal = QE * n_photons </p>
+       <p>Noise = ENF * SQRT( QE * n_photons + ReadNoise<sup>2</sup> + Texp*Dark_Current )</p>
+       <p> Will replace this with a Tex or something ASAP to minimize ugliness </p>
+    `)
+
+
+//============================  Additional misc funcitons ==============================//
+
 function range(start, stop, step = 1){
     var output = [];
     for (i = start; i<=stop; i += step){
@@ -402,7 +463,6 @@ function objZip(obj){
 }
 
 // random color helper function
-
 function randColor(){
     function roll(){
         return Math.round(255*Math.random())
