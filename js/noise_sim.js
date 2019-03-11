@@ -1,5 +1,5 @@
 console.log('Noise Sim')
-d3.select('body').append('div').text('Signal : Noise Visualizer').style('text-align','center').style('font-size','20pt')
+//d3.select('body').append('div').text('Signal : Noise Visualizer').style('text-align','left').style('font-size','20pt')
 
 // sensorChoices is an object read in from a separate js file... I could have planned this better
 var sensorChoices = Object.keys(sensorDefinitions);
@@ -29,10 +29,9 @@ var paramStep = { qe : 0.05,
 function Chart(paramObj){
 
     var self = this;
-
     if (!paramObj){
-        paramObj = {canvasWidth : 900,
-                    canvasHeight : 400,
+        paramObj = {canvasWidth : 500,
+                    canvasHeight : 300,
                     canvasMargin : 50,
                     tExp : 1,
                     yTicks : [0.2,1,2,5,10,20],
@@ -49,6 +48,7 @@ function Chart(paramObj){
 
     this.svg = d3.select('#contentDiv')
         .append('div')
+        .style('display','inline-block')
         .style('text-align','center')
         .append('svg')
         .attr('width', paramObj.canvasWidth)
