@@ -96,6 +96,19 @@
         "color" : "purple",
         "dashArray" : "0",
         "type" : "scmos"
+    },
+
+    "Neo" : {
+        "name" : "Neo",
+        "iDark" : 0.007,
+        "readNoise" : 1,
+        "enf" : 1,
+        "qe" : 0.6,
+        "tExp" : 1,
+        "pixelSize" : 6.5,
+        "color" : "gray",
+        "dashArray" : "0",
+        "type" : "scmos"
     }
 
 }

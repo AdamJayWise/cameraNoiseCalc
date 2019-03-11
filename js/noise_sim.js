@@ -1,5 +1,4 @@
 console.log('Noise Sim')
-//d3.select('body').append('div').text('Signal : Noise Visualizer').style('text-align','left').style('font-size','20pt')
 
 // sensorChoices is an object read in from a separate js file... I could have planned this better
 var sensorChoices = Object.keys(sensorDefinitions);
@@ -29,10 +28,11 @@ var paramStep = { qe : 0.05,
 function Chart(paramObj){
 
     var self = this;
+
     if (!paramObj){
-        paramObj = {canvasWidth : 500,
-                    canvasHeight : 300,
-                    canvasMargin : 50,
+        paramObj = {canvasWidth : 700,
+                    canvasHeight : 400,
+                    canvasMargin : 60,
                     tExp : 1,
                     yTicks : [0.2,1,2,5,10,20],
                     xTicks : [1,10,25,50,100,25,500,1000] };
@@ -47,9 +47,9 @@ function Chart(paramObj){
     // ....
 
     this.svg = d3.select('#contentDiv')
+        .text('Signal : Noise Visualizer').style('font-size','20pt')
+        .style('text-align', 'center')
         .append('div')
-        .style('display','inline-block')
-        .style('text-align','center')
         .append('svg')
         .attr('width', paramObj.canvasWidth)
         .attr('height', paramObj.canvasHeight)
@@ -242,7 +242,7 @@ function Chart(paramObj){
         .text('Plot as Photons / Pixel')
         .on('click', function(){
             self.illuminationStyle = 'perPixel';
-            d3.select('#xLabel').text('Photons/Pixel');
+            d3.select('#xLabel').text('Photons / Pixel');
             self.update();
             self.draw();
         })
