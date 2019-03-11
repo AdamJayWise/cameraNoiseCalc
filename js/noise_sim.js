@@ -165,7 +165,7 @@ function Chart(paramObj){
                         .attr('x', self.xScale(self.xTicks[0]))
                         .attr('y', self.yScale(self.yTicks[i+1])+2)
                         .attr('width',  self.xScale( self.xTicks.slice(-1)[0]) -self.xScale( self.xTicks[0]) )
-                        .attr('height', self.yScale(self.yTicks[i]) - self.yScale(self.yTicks[i+1]) - 2)
+                        .attr('height',  Math.max( self.yScale( self.yTicks[i]) - self.yScale(self.yTicks[i+1]) - 2 , 0 ))
                         .attr('fill','rgba(0,0,0,.1')
                         .attr('stroke-width','2')
                 }
