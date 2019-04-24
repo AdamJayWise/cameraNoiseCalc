@@ -30,8 +30,8 @@ function Chart(paramObj){
     var self = this;
 
     if (!paramObj){
-        paramObj = {canvasWidth : 700,
-                    canvasHeight : 400,
+        paramObj = {canvasWidth : 500,
+                    canvasHeight : 300,
                     canvasMargin : 60,
                     tExp : 1,
                     yTicks : [0.2,1,2,5,10,20],
@@ -46,13 +46,60 @@ function Chart(paramObj){
     this.illuminationStyle = 'perPixel' // could also be perArea (13*13um)
     // ....
 
-    this.svg = d3.select('#contentDiv')
-        .text('Signal : Noise Visualizer').style('font-size','20pt')
+    d3.select('#contentDiv')
+        .append('div')
+        .text('Signal to Noise Calculator').style('font-size','24px')
         .style('text-align', 'center')
+        .style('margin', '20px 0 40px 0')
+
+    d3.select('#contentDiv')
+        .append('div')
+        .text('Controls')
+        .attr('class','blueDivider')
+    
+    d3.select('#contentDiv')
+        .append('div')
+        .attr('id','controlDiv')
+
+    d3.select('#contentDiv')
+        .append('div')
+        .text('Signal to Noise Ratio')
+        .attr('class','blueDivider')
+        
+    this.svg = d3.select('#contentDiv')
+        .append('div')
+        .attr('id','chartDiv')
         .append('div')
         .append('svg')
         .attr('width', paramObj.canvasWidth)
         .attr('height', paramObj.canvasHeight)
+
+    d3.select('#chartDiv')
+        .append('div')
+        .attr('id','legendDiv')
+        .attr('width','400px')
+        .attr('height',this.canvasHeight+'px')
+
+    d3.select('#contentDiv')
+        .append('div')
+        .text('Sensors')
+        .attr('class','blueDivider')
+
+    d3.select('#contentDiv')
+        .append('div')
+        .attr('id','sensorDiv')
+
+    d3.select('#contentDiv')
+        .append('div')
+        .text('Notes')
+        .attr('class','blueDivider')
+
+    d3.select('#contentDiv')
+        .append('div')
+        .attr('id','notesDiv')
+    
+
+        
     
     this.traces = []
 
@@ -164,10 +211,7 @@ function Chart(paramObj){
                         .classed('axis',true)
                         .attr('x', self.xScale(self.xTicks[0]))
                         .attr('y', self.yScale(self.yTicks[i+1])+2)
-                        .attr('width',  self.xScale( self.xTicks.slice(-1)[0]) -self.xScale( self.xTicks[0]) )
-                        .attr('height',  Math.max( self.yScale( self.yTicks[i]) - self.yScale(self.yTicks[i+1]) - 2 , 0 ))
-                        .attr('fill','rgba(0,0,0,.1')
-                        .attr('stroke-width','2')
+                     
                 }
     }
 
@@ -193,7 +237,7 @@ function Chart(paramObj){
        .attr('transform', `translate(${self.canvasMargin/3},${self.canvasHeight/2}) rotate(-90)`)
 
     // add additional controls to chart
-    var controlDiv = d3.select('#contentDiv')
+    var controlDiv = d3.select('#controlDiv')
         .append('div')
         .style('margin','5px')
         .attr('id','controlDiv')
@@ -201,8 +245,9 @@ function Chart(paramObj){
     controlDiv
         .append('span')
         .html('&nbsp; Exposure Time, s : ')
+        .style('margin','0 5px 0 0')
         .append('input')
-        .style('width','50px')
+        .style('width','30px')
         .attr('id','texp')
         .attr('value',1)
         .on('input', function(){
@@ -212,7 +257,7 @@ function Chart(paramObj){
 
     controlDiv
         .append('button')
-        .style('margin','0 0 0 10px')
+        .attr('class','controlButton')  
         .text('Add Sensor')
         .on('click',function(){
         var t = new Trace({
@@ -232,13 +277,13 @@ function Chart(paramObj){
 
     controlDiv
         .append('button')
-        .style('margin','0 0 0 10px')
+        .attr('class','controlButton')
         .text('Download as CSV')
         .on('click', function(){self.downloadData.call(self)})
 
     controlDiv
         .append('button')
-        .style('margin','0 0 0 10px')
+        .attr('class','controlButton')
         .text('Plot as Photons / Pixel')
         .on('click', function(){
             self.illuminationStyle = 'perPixel';
@@ -249,7 +294,7 @@ function Chart(paramObj){
 
     controlDiv
         .append('button')
-        .style('margin','0 0 0 10px')
+        .attr('class','controlButton')
         .html('Plot as Photons / 13um<sup>2</sup>')
         .on('click', function(){
             self.illuminationStyle = 'perArea';
@@ -306,7 +351,7 @@ function Trace(paramObj){
         .attr('stroke-dasharray', this.dashArray)
 
     // create a control panel
-    this.panel = d3.select('#contentDiv')
+    this.panel = d3.select('#sensorDiv')
         .append('div')
         .style('border','1px solid black')
         .style('display', 'inline-block')
@@ -314,6 +359,7 @@ function Trace(paramObj){
         .style('margin','2px')
         .style('font-size','10pt')
         .style('font-weight', 800)
+        .attr('class','sensorPanel')
     
     var colorBadge = this.panel
             .append('div')
@@ -328,6 +374,25 @@ function Trace(paramObj){
             .style('text-align','center')
             .style('font-size','12pt')
             .style('margin','0')
+    
+    // create a chart legend for this sensor
+
+    this.legendEntry = d3.select('#legendDiv')
+        .append('div')
+        .style('display','flex')
+
+    var legendLine = this.legendEntry
+                        .append('div')
+                        .style('background-color',self.color)
+                        .style('width','30px')
+                        .style('height','3px')
+                        .style('margin','9px 4px 0 0 ')
+                        
+
+    var legendItem = this.legendEntry
+                        .append('div')
+                        .attr('class','legendItem')
+                        .text(this.name)
 
     // append ui elements for each controllable parameter
     Object.keys(controlParams)
@@ -391,6 +456,10 @@ function Trace(paramObj){
 
     // method to update control panel display fields
     this.updatePanel = function(){
+        
+        legendItem.text(self.name)
+        legendLine.style('background-color',self.color)
+        
         colorBadge.style('background-color', self.color);
         nameBadge.text(self.name)
         self.panel.selectAll('.controlP').each( function(l,j){ 
@@ -471,14 +540,11 @@ mainChart.draw();
 
 
 
-d3.select('body')
-    .append('div')
-    .attr('id','footerDiv')
-    .append('div')
+d3.select('#notesDiv')
     .html(`<p>Signal : Noise Calculation - Here, signal to noise is plotted as:</p>
         <p>Signal = QE * n_photons <br>
         Noise = ENF * SQRT( QE * n<sub>photons</sub> + ReadNoise<sup>2</sup> + T<sub>exp</sub>*I<sub>Dark</sub> )<br>
-        <sub>Will replace this with a Tex or something ASAP to minimize ugliness</sub> </p>
+        </p>
     `)
 
 
