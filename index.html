@@ -18,7 +18,8 @@
 
 	#chartDiv {
 		display : flex;
-		
+		padding : 20px;
+
 	}
 
 	.blueDivider {
@@ -41,8 +42,13 @@
 	button {
 		font: 14px/100% 'Arimo', sans-serif;
 		border-radius : 0.3em;
+		text-align: center;
 		text-shadow : 0 1px 1px rgba(0,0,0,.1);
-		box-shadow : 0 1px 1px rgba(0,0,0,.1)
+		box-shadow : 0 1px 1px rgba(0,0,0,.1);
+		background : -webkit-gradient(linear, left top, left bottom, from(#1c2674), to(#4656d2));
+		border : solid 1px #0b1030;
+		color : #fef4e9;
+		margin-right : 1px;
 	}
 
 	.controlButton{
@@ -52,6 +58,12 @@
 
 	.sensorPanel {
 		font-family: arial;
+	}
+
+	.dashedDiv {
+		background: repeating-linear-gradient(
+		90deg, black 0px 4px, white 4px 8px);
+
 	}
 
 </style>

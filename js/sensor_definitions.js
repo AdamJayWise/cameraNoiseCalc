@@ -14,7 +14,8 @@
         "pixelSize" : 25,
         "color" : "black",
         "dashArray" : 4,
-        "type" : "ccd"
+        "type" : "ccd",
+        "lineClass" : "dashedDiv"
     },
 
     "-- Andor --": {
@@ -88,7 +89,7 @@
     "Sona 4.2" : {
         "name" : "Sona 4.2",
         "iDark" : 0.4,
-        "readNoise" : 1.6,
+        "readNoise" : 1.8,
         "enf" : 1,
         "qe" : 0.95,
         "tExp" : 1,

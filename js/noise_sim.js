@@ -330,6 +330,7 @@ function Trace(paramObj){
                      readNoise : 'Read Noise, e',
                      enf : 'ENF',
                      qe : 'QE',
+                     pixelSize : 'Pixel Size, um'
                      }
 
     var self = this;
@@ -387,6 +388,7 @@ function Trace(paramObj){
                         .style('width','30px')
                         .style('height','3px')
                         .style('margin','9px 4px 0 0 ')
+                        //.attr('class','dashedDiv')
                         
 
     var legendItem = this.legendEntry
@@ -458,7 +460,14 @@ function Trace(paramObj){
     this.updatePanel = function(){
         
         legendItem.text(self.name)
-        legendLine.style('background-color',self.color)
+        
+        if(self.lineClass){
+            legendLine.classed(self.lineClass,true);
+        }
+        else {
+            legendLine.classed("dashedDiv", false);
+            legendLine.style('background-color',self.color)
+        }
         
         colorBadge.style('background-color', self.color);
         nameBadge.text(self.name)
@@ -532,7 +541,7 @@ var t = new Trace({
     tExp : 1,
     pixelSize : 25,
     chart : mainChart,
-    dashArray : 4,
+    dashArray : 0,
     color : 'black'
 });
 
