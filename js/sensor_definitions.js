@@ -99,6 +99,19 @@
         "type" : "scmos"
     },
 
+    "Marana" : {
+        "name" : "Marana",
+        "iDark" : 0.4,
+        "readNoise" : 1.8,
+        "enf" : 1,
+        "qe" : 0.95,
+        "tExp" : 1,
+        "pixelSize" : 11,
+        "color" : "cyan",
+        "dashArray" : "0",
+        "type" : "scmos"
+    },
+
     "Neo" : {
         "name" : "Neo",
         "iDark" : 0.007,

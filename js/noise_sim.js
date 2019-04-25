@@ -7,7 +7,8 @@ var sensorChoices = Object.keys(sensorDefinitions);
 var paramBounds = { qe : [0.1,1],
                iDark : [0,100],
                readNoise : [0, 100],
-               enf : [1,3.5] }
+               enf : [1,3.5],
+               pixelSize : [1,100] };  
 
 paramScales = {};
 
@@ -22,7 +23,8 @@ Object.keys(paramBounds).forEach(function(key){
 var paramStep = { qe : 0.05,
     iDark : 0.01,
     readNoise : 0.1,
-    enf : 0.1 }
+    enf : 0.1,
+    pixelSize : 0.5};
 
 // create a chart class to mananage plotting
 function Chart(paramObj){
@@ -410,6 +412,7 @@ function Trace(paramObj){
 
             if (self.name == 'Custom Sensor'){
                 p.append('button')
+                .attr('class','mathButton')
                 .text('+')
                 .on('click', function(){
                             self[l] = paramScales[l](self[l] + paramStep[l]);
@@ -418,6 +421,7 @@ function Trace(paramObj){
                             })
                 
                 p.append('button')
+                .attr('class','mathButton')
                 .text('-')
                 .on('click', function(){
                             self[l] = paramScales[l](self[l] - paramStep[l]);
