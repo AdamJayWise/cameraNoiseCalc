@@ -52,7 +52,7 @@ function Chart(paramObj){
         .append('div')
         .text('Signal to Noise Calculator').style('font-size','24px')
         .style('text-align', 'center')
-        .style('margin', '20px 0 40px 0')
+        .style('margin', '10px 0 10px 0')
 
     d3.select('#contentDiv')
         .append('div')
@@ -165,6 +165,10 @@ function Chart(paramObj){
         }
     }
 
+    this.remove = function(){
+
+    }
+
     // method to update axes 
     this.updateAxes = function() {
         d3.selectAll('.axis').remove()
@@ -241,7 +245,7 @@ function Chart(paramObj){
     // add additional controls to chart
     var controlDiv = d3.select('#controlDiv')
         .append('div')
-        .style('margin','5px')
+        .style('margin','0px')
         .attr('id','controlDiv')
     
     controlDiv
@@ -359,10 +363,28 @@ function Trace(paramObj){
         .style('border','1px solid black')
         .style('display', 'inline-block')
         .style('padding', '5px')
+        .style('position','relative')
         .style('margin','2px')
         .style('font-size','10pt')
         .style('font-weight', 800)
         .attr('class','sensorPanel')
+
+    this.panel
+        .append('button')
+        .text('X')
+        .style('box-shadow','none')
+        .style('padding','1px 2px 2px 3px')
+        .style('color','black')
+        .style('font-weight','800')
+        .style('font-size','8pt')
+        .style('text-align','center')
+        .style('position','absolute')
+        .style('top','1px')
+        .style('left','1px')
+        .style('background','red')
+        .style('border-radius','0px')
+        .style('border','2px solid white')
+        .on('click',function(){self.remove()})
     
     var colorBadge = this.panel
             .append('div')
@@ -510,9 +532,29 @@ function Trace(paramObj){
             }
 
             var signal = self.qe * val;
-            var noise = self.enf * Math.sqrt( self.qe*val + readNoise**2 + self.chart.tExp * iDark )
+            var noise = self.enf * Math.sqrt( (self.qe*val) + readNoise**2 + self.chart.tExp * iDark )
             return signal / noise
         })
+    }
+
+    // function to remove trace from the chart
+    this.remove = function(){
+        // remove the control panel
+        self.panel.remove()
+        // remove the path from the chart
+        self.path.remove()
+        // figure out which trace this is, and remove it from the chart's list of traces
+        for (var i=0;i<self.chart.traces.length;i++){
+            console.log(i);
+            console.log(self.chart.traces[i]===self)
+            if (self.chart.traces[i]===self){
+                self.chart.traces.splice(i,1);
+            }
+        }
+        // remove the legend entry
+        this.legendEntry.remove();
+
+
     }
 
     // method to draw trace to graph
