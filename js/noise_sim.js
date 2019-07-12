@@ -3,6 +3,10 @@ console.log('Noise Sim')
 // sensorChoices is an object read in from a separate js file... I could have planned this better
 var sensorChoices = Object.keys(sensorDefinitions);
 
+// all sub-models of camera, could be useful
+allModels = ['BEX2_DD', 'BR_DD', 'BU', 'BU2', 'BV', 'FI', 'OE', 'UV', 'BEX2','Zyla5.5', 'Neo5.5', 'Zyla4.2PLUS',
+    'Sona', 'Marana_TVISB', 'Marana_UV']
+
 // build a d3 scale for each parameter to clamp legal values
 var paramBounds = { qe : [0.1,1],
                iDark : [0,100],
@@ -36,6 +40,7 @@ function Chart(paramObj){
                     canvasHeight : 300,
                     canvasMargin : 60,
                     tExp : 1,
+                    wavelength : 500, // wavelength in nm
                     yTicks : [0.2,1,2,5,10,20],
                     xTicks : [1,10,25,50,100,25,500,1000] };
     }
@@ -99,9 +104,6 @@ function Chart(paramObj){
     d3.select('#contentDiv')
         .append('div')
         .attr('id','notesDiv')
-    
-
-        
     
     this.traces = []
 
@@ -248,6 +250,23 @@ function Chart(paramObj){
         .style('margin','0px')
         .attr('id','controlDiv')
     
+    // append control for wavelength
+    console.log(this)
+    controlDiv
+    .append('span')
+    .html('&nbsp; Wavelength, nm : ')
+    .style('margin','0 5px 0 0')
+    .append('input')
+    .style('width','30px')
+    .attr('id','texp')
+    .attr('value',500)
+    .on('input', function(){
+        self.wavelength = this.value;
+        self.traces.forEach(e=>e.updateQE())
+        self.traces.forEach(e=>e.updatePanel())
+        self.draw()
+    })
+    
     controlDiv
         .append('span')
         .html('&nbsp; Exposure Time, s : ')
@@ -264,10 +283,10 @@ function Chart(paramObj){
     controlDiv
         .append('button')
         .attr('class','controlButton')  
-        .text('Add Sensor')
+        .text('Add Camera')
         .on('click',function(){
         var t = new Trace({
-            name : 'Custom Sensor',
+            name : 'Custom Camera',
             iDark : 0,
             readNoise : 5,
             enf : 1,
@@ -276,7 +295,9 @@ function Chart(paramObj){
             pixelSize : 25,
             chart : mainChart,
             dashArray : 0,
-            color : randColor()
+            color : randColor(),
+            availableModels : allModels,
+            currentModel : 'BR_DD'
         });
         mainChart.draw()
         })
@@ -325,10 +346,17 @@ function Trace(paramObj){
                 tExp : 1,
                 pixelSize : 25,
                 chart : null,
-                dashArray : 4
+                dashArray : 4,
+                availableModels : ['A','B'],
+                currentModel : ['A']
         }
     }
 
+
+    // so I need to shoehorn a choice of sensor into here... how?  THere should be a dropdown of
+    // available sensors for each pre-defined camera.  Updating the sensor should change the QE
+    // there should be a global control for wavelength that can be used to check.  When that value is changed
+    // it should update each trace's QE and replot, based on a call to the traces' chip.getQE() method
 
     //object of parameters to change and printable names
     var controlParams = {
@@ -432,7 +460,7 @@ function Trace(paramObj){
                 
             var p = self.panel.append('div')
 
-            if (self.name == 'Custom Sensor'){
+            if (self.name == 'Custom Camera'){
                 p.append('button')
                 .attr('class','mathButton')
                 .text('+')
@@ -453,14 +481,14 @@ function Trace(paramObj){
             }
         })
     
-    // add a pull-down UI element to allow choosing from pre-defined sensors
+    // add a pull-down UI element to allow choosing from pre-defined cameras
     var select = self.panel
         .append('div')
         .style('padding', '10px 10px 0 0 ')
         .append('select')
-        .attr('value', 'Pre-Defined Sensors')
+        .attr('value', 'Pre-Defined Cameras')
         .attr('class', 'select')
-        .on('change', onchange)
+        .on('change', onchangeCamera)
         
     var options = select
         .selectAll('option')
@@ -468,7 +496,7 @@ function Trace(paramObj){
         .append('option')
         .text(function (d) { return d; });
     
-    function onchange() {
+    function onchangeCamera() {
             var selectValue = d3.select(this).property('value');
             if (selectValue[0] !== '-'){
                 var newParams = sensorDefinitions[selectValue];
@@ -476,11 +504,71 @@ function Trace(paramObj){
                 for (var i in keys){
                     self[keys[i]] = newParams[keys[i]]
                 }
+
+                // change the available sensor options, and apply the first available one
+                // first remove old choices
+                self.panel
+                    .select('.availableModels')
+                    .selectAll('option')
+                    .remove();
+                // then update as appropriate
+                self.panel
+                    .select('.availableModels')
+                    .selectAll('option')
+                    .data(sensorDefinitions[selectValue]['availableModels'])
+                    .enter()
+                    .append('option')
+                    .text(function(d) {return d;})
+                // then update the params using the first value of the available models for that camera
+                if (selectValue[0] !== '-'){
+                    //update QE based on current wavelenth and model choice
+                    var firstModel = sensorDefinitions[selectValue]['availableModels'][0]
+                    self.qe = models[firstModel].getQE(self.chart.wavelength)
+                    self.currentModel = firstModel;
+                }
+
+
                 self.updatePanel();
                 self.chart.draw();
             }
         };
 
+    // add a pull-down UI element to allow choosing from pre-defined model variants
+    var select = self.panel
+        .append('div')
+        .style('padding', '10px 10px 0 0 ')
+        .append('select')
+        .attr('value', 'Available Models')
+        .attr('class', 'select availableModels')
+        .on('change', onchangeModel)
+            
+    var options = self.panel
+        .select('.availableModels')
+        .selectAll('option')
+        .data(self.availableModels).enter()
+        .append('option')
+        .text(function (d) { return d; });
+    
+    function onchangeModel() {
+            var selectValue = d3.select(this).property('value');
+            console.log(selectValue)
+            console.log(self.chart.wavelength)
+            if (selectValue[0] !== '-'){
+                //update QE based on current wavelenth and model choice
+                self.qe = models[selectValue].getQE(self.chart.wavelength)
+                self.currentModel = selectValue;
+                self.updatePanel();
+                self.chart.draw();
+                console.log(self)
+            }
+        };
+
+
+    // method to update QE
+    this.updateQE = function() {
+        self.qe = models[self.currentModel].getQE(self.chart.wavelength);
+        console.log(self)
+    }
 
     // method to update control panel display fields
     this.updatePanel = function(){
@@ -579,7 +667,7 @@ d3.select('body')
 var mainChart = new Chart()
 
 var t = new Trace({
-    name : 'Custom Sensor',
+    name : 'Custom Camera',
     iDark : 0,
     readNoise : 0,
     enf : 1,
@@ -588,7 +676,9 @@ var t = new Trace({
     pixelSize : 25,
     chart : mainChart,
     dashArray : 0,
-    color : 'black'
+    color : 'black',
+    availableModels : allModels,
+    currentModel : 'Ideal'
 });
 
 mainChart.draw();

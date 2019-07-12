@@ -1,10 +1,10 @@
 // definition of sensor types
 
   var sensorDefinitions = {
-    "-- Pre-Defined Sensors --": {
+    "-- Pre-Defined Cameras --": {
     },
     
-    "Ideal Sensor" : {
+    "Ideal Camera" : {
         "name" : "Ideal Sensor",
         "iDark" : 0,
         "readNoise" : 0,
@@ -15,7 +15,8 @@
         "color" : "black",
         "dashArray" : 4,
         "type" : "ccd",
-        "lineClass" : "dashedDiv"
+        "lineClass" : "dashedDiv",
+        "availableModels" : ['Ideal'],
     },
 
     "-- Andor --": {
@@ -57,7 +58,8 @@
         "pixelSize" : 16,
         "color" : "blue",
         "dashArray" : "0",
-        "type" : "emccd"
+        "type" : "emccd",
+        "availableModels" : ['FI','BVF','BV'],
     },
 
     "Newton DU940P CCD" : {
@@ -109,7 +111,8 @@
         "pixelSize" : 13,
         "color" : "lime",
         "dashArray" : "0",
-        "type" : "emccd"
+        "type" : "emccd",
+        "availableModels" : ['BV'],
     },
 
     "iXon Life 897" : {
@@ -122,7 +125,8 @@
         "pixelSize" : 16,
         "color" : "violet",
         "dashArray" : "0",
-        "type" : "emccd"
+        "type" : "emccd",
+        "availableModels" : ['BV'],
     },
 
     "Sona 4.2B-11" : {
@@ -165,3 +169,5 @@
     }
 
 }
+
+
