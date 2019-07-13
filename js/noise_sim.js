@@ -4,8 +4,7 @@ console.log('Noise Sim')
 var sensorChoices = Object.keys(sensorDefinitions);
 
 // all sub-models of camera, could be useful
-allModels = ['BEX2_DD', 'BR_DD', 'BU', 'BU2', 'BV', 'FI', 'OE', 'UV', 'BEX2','Zyla5.5', 'Neo5.5', 'Zyla4.2PLUS',
-    'Sona', 'Marana_TVISB', 'Marana_UV']
+allModels = Object.keys(models);
 
 // build a d3 scale for each parameter to clamp legal values
 var paramBounds = { qe : [0.1,1],
@@ -297,7 +296,7 @@ function Chart(paramObj){
             dashArray : 0,
             color : randColor(),
             availableModels : allModels,
-            currentModel : 'BR_DD'
+            currentModel : 'Ideal'
         });
         mainChart.draw()
         })
@@ -482,9 +481,12 @@ function Trace(paramObj){
         })
     
     // add a pull-down UI element to allow choosing from pre-defined cameras
+
+    self.panel.append('div').html('Camera Type:').style('margin','5px 0 0 0')
+
     var select = self.panel
         .append('div')
-        .style('padding', '10px 10px 0 0 ')
+        .style('padding', '0px 5px 0 0 ')
         .append('select')
         .attr('value', 'Pre-Defined Cameras')
         .attr('class', 'select')
@@ -533,10 +535,11 @@ function Trace(paramObj){
             }
         };
 
+    self.panel.append('div').html('Sensor Type:').style('margin','5px 0 0 0').style('padding','0')
     // add a pull-down UI element to allow choosing from pre-defined model variants
     var select = self.panel
         .append('div')
-        .style('padding', '10px 10px 0 0 ')
+        .style('padding', '0')
         .append('select')
         .attr('value', 'Available Models')
         .attr('class', 'select availableModels')
@@ -677,7 +680,7 @@ var t = new Trace({
     chart : mainChart,
     dashArray : 0,
     color : 'black',
-    availableModels : allModels,
+    availableModels : ['Ideal'],
     currentModel : 'Ideal'
 });
 

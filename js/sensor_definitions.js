@@ -32,7 +32,8 @@
         "pixelSize" : 6.5,
         "color" : "green",
         "dashArray" : "0",
-        "type" : "scmos"
+        "type" : "scmos",
+        "availableModels" : ['Zyla 5.5']
     },
 
     "Zyla 4.2 Plus" : {
@@ -45,7 +46,8 @@
         "pixelSize" : 6.5,
         "color" : "orange",
         "dashArray" : "0",
-        "type" : "scmos"
+        "type" : "scmos",
+        "availableModels" : ['Zyla 4.2 PLUS']
     },
 
     "Newton 971P EMCCD" : {
@@ -59,10 +61,10 @@
         "color" : "blue",
         "dashArray" : "0",
         "type" : "emccd",
-        "availableModels" : ['FI','BVF','BV'],
+        "availableModels" : ['BV','BVF','FI'],
     },
 
-    "Newton DU940P CCD" : {
+    "Newton DU9x0 CCD" : {
         "name" : "Newton DU940P CCD",
         "iDark" : 0.00001,
         "readNoise" : 2.5,
@@ -72,7 +74,8 @@
         "pixelSize" : 13.5,
         "color" : "red",
         "dashArray" : "0",
-        "type" : "ccd"
+        "type" : "ccd",
+        "availableModels" : ['BU','BU2','BVF','FI','OE','UV','BR-DD','BEX2-DD'],
     },
 
     "iXon Ultra 888" : {
@@ -85,7 +88,8 @@
         "pixelSize" : 13,
         "color" : "olive",
         "dashArray" : "0",
-        "type" : "emccd"
+        "type" : "emccd",
+        "availableModels" : ['BV','BVF'],
     },
 
     "iXon Ultra 897" : {
@@ -98,7 +102,8 @@
         "pixelSize" : 16,
         "color" : "silver",
         "dashArray" : "0",
-        "type" : "emccd"
+        "type" : "emccd",
+        "availableModels" : ['BV','BVF'],
     },
 
     "iXon Life 888" : {
@@ -139,7 +144,8 @@
         "pixelSize" : 11,
         "color" : "purple",
         "dashArray" : "0",
-        "type" : "scmos"
+        "type" : "scmos",
+        "availableModels" : ['Sona'],
     },
 
     "Marana 4.2B-11" : {
@@ -152,7 +158,9 @@
         "pixelSize" : 11,
         "color" : "cyan",
         "dashArray" : "0",
-        "type" : "scmos"
+        "type" : "scmos",
+        "availableModels" : ['Marana-TVISB','Marana-UV'],
+        
     },
 
     "Neo 5.5" : {
@@ -165,7 +173,8 @@
         "pixelSize" : 6.5,
         "color" : "gray",
         "dashArray" : "0",
-        "type" : "scmos"
+        "type" : "scmos",
+        "availableModels" : ['Neo 5.5'],
     }
 
 }
