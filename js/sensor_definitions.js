@@ -53,7 +53,7 @@
     "Newton 971P EMCCD" : {
         "name" : "Newton 970 EMCCD",
         "iDark" : 0.0007,
-        "readNoise" : 0,
+        "readNoise" : 0.008,
         "enf" : 1.41,
         "qe" : 0.95,
         "tExp" : 1,
@@ -81,7 +81,7 @@
     "iXon Ultra 888" : {
         "name" : "iXon Ultra 888",
         "iDark" : 0.00025,
-        "readNoise" : 0,
+        "readNoise" : 0.012,
         "enf" : 1.41,
         "qe" : 0.95,
         "tExp" : 1,
@@ -95,7 +95,7 @@
     "iXon Ultra 897" : {
         "name" : "iXon Ultra 897",
         "iDark" : 0.00025,
-        "readNoise" : 0,
+        "readNoise" : 0.015,
         "enf" : 1.41,
         "qe" : 0.95,
         "tExp" : 1,
@@ -109,7 +109,7 @@
     "iXon Life 888" : {
         "name" : "iXon Life 888",
         "iDark" : 0.00025,
-        "readNoise" : 0,
+        "readNoise" : 0.04,
         "enf" : 1.41,
         "qe" : 0.95,
         "tExp" : 1,
@@ -123,7 +123,7 @@
     "iXon Life 897" : {
         "name" : "iXon Life 897",
         "iDark" : 0.00025,
-        "readNoise" : 0,
+        "readNoise" : 0.065,
         "enf" : 1.41,
         "qe" : 0.95,
         "tExp" : 1,
@@ -177,18 +177,18 @@
         "availableModels" : ['Neo 5.5'],
     },
 
-    "Idus DU490A" : {
-        "name" : "Idus DU490A",
-        "iDark" : 12000,
-        "readNoise" : 580,
+    "Idus DU420A-BU/BV" : {
+        "name" : "Idus DU420A",
+        "iDark" : 0.002,
+        "readNoise" : 6,
         "enf" : 1,
-        "qe" : 0.85,
+        "qe" : 0.97,
         "tExp" : 1,
-        "pixelSize" : 25,
-        "color" : "red",
+        "pixelSize" : 26,
+        "color" : "orange",
         "dashArray" : "0",
         "type" : "ccd",
-        "availableModels" : ['Idus 1.7'],
+        "availableModels" : ['BU','BU2','BVF'],
     }
 
 
