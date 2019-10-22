@@ -450,16 +450,42 @@ function Trace(paramObj){
     // append ui elements for each controllable parameter
     Object.keys(controlParams)
         .forEach(function(l){
-            self.panel
+            var controlInputDiv = self.panel
                 .append('div')
                 .style('margin','5px 0 0 0 ')
                 .classed('controlP', true)
                 .attr('param',l)
-                .text( controlParams[l] + ' : ' + self[l])
+                .text( controlParams[l] + ' : ')
+
+            var paramBounds = {
+                'readNoise' : [0,30],
+                'QE' : [0,1],
+                'iDark' : [0,1],
+                'enf' : [0,4],
+                'pixelSize' : [0.1,50]
+            }
+            
+            // add an input field for each value
+            var numberInput = controlInputDiv.append('input')
+                .attr('type','text')
+                .style('width','39px')
+                .attr('value',self[l])
+                .on('change', function(){
+                    if( isNaN(Number(this.value)) ){
+                        this.value = 0;
+                    }
+                    var currentParam = d3.select(this.parentNode).attr('param');
+                    this.value = Math.min(this.value , paramBounds[currentParam][1]); 
+                    this.value = Math.max(this.value , paramBounds[currentParam][0]);
+
+                    self[l] = this.value;
+                    mainChart.draw();
+                    self.updatePanel();
+                } )
                 
             var p = self.panel.append('div')
 
-            if (self.name == 'Custom Camera'){
+            if (0){
                 p.append('button')
                 .attr('class','mathButton')
                 .text('+')
@@ -554,15 +580,12 @@ function Trace(paramObj){
     
     function onchangeModel() {
             var selectValue = d3.select(this).property('value');
-            console.log(selectValue)
-            console.log(self.chart.wavelength)
             if (selectValue[0] !== '-'){
                 //update QE based on current wavelenth and model choice
                 self.qe = models[selectValue].getQE(self.chart.wavelength)
                 self.currentModel = selectValue;
                 self.updatePanel();
                 self.chart.draw();
-                console.log(self)
             }
         };
 
@@ -588,9 +611,17 @@ function Trace(paramObj){
         
         colorBadge.style('background-color', self.color);
         nameBadge.text(self.name)
+        
         self.panel.selectAll('.controlP').each( function(l,j){ 
             var newParam = d3.select(this).attr('param');
-            d3.select(this).text(controlParams[newParam] + ' : ' + Math.round(100*self[newParam]) / 100)
+            //d3.select(this).text(controlParams[newParam] + ' : ' + Math.round(100*self[newParam]) / 100)
+            var valueOutput = self[newParam];
+            if (valueOutput < 0.01){
+                console.log(valueOutput)
+                valueOutput = Number(valueOutput).toExponential();
+                console.log(valueOutput)
+            }
+            d3.select(this).select('input').property('value', valueOutput)
         } );
     }
 

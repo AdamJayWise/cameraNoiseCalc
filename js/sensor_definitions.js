@@ -175,7 +175,22 @@
         "dashArray" : "0",
         "type" : "scmos",
         "availableModels" : ['Neo 5.5'],
+    },
+
+    "Idus DU490A" : {
+        "name" : "Idus DU490A",
+        "iDark" : 12000,
+        "readNoise" : 580,
+        "enf" : 1,
+        "qe" : 0.85,
+        "tExp" : 1,
+        "pixelSize" : 25,
+        "color" : "red",
+        "dashArray" : "0",
+        "type" : "ccd",
+        "availableModels" : ['Idus 1.7'],
     }
+
 
 }
 
