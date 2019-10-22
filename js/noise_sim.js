@@ -648,7 +648,7 @@ function Trace(paramObj){
                 nPixels = (13**2)/(self.pixelSize**2);
                 if (self.type == 'scmos') {
                     // if the camera is scmos, make the read noise stack
-                    readNoise = Math.sqrt( self.readNoise * nPixels )
+                    readNoise =  self.readNoise * Math.sqrt(nPixels);
                 }
                 iDark = ( self.iDark * nPixels )
             }

@@ -185,10 +185,10 @@
         "qe" : 0.97,
         "tExp" : 1,
         "pixelSize" : 26,
-        "color" : "orange",
+        "color" : "lightCoral",
         "dashArray" : "0",
         "type" : "ccd",
-        "availableModels" : ['BU','BU2','BVF'],
+        "availableModels" : ['BU','BU2','BV','BVF'],
     }
 
 
