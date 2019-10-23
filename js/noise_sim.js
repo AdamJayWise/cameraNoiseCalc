@@ -321,7 +321,7 @@ function Chart(paramObj){
     controlDiv
         .append('button')
         .attr('class','controlButton')
-        .html('Plot as Photons / 13um*13um<sup>2</sup>')
+        .html('Plot as Photons / 13um*13um')
         .on('click', function(){
             self.illuminationStyle = 'perArea';
             d3.select('#xLabel').html('Photons / 13um*13um Area');

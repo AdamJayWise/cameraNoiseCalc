@@ -228,7 +228,7 @@
         "tExp" : 1,
         "pixelSize" : 16,
         "color" : "peru",
-        "dashArray" : "10 2 2 2",
+        "dashArray" : "0",
         "type" : "ccd",
         "availableModels" : ['FI'],
     }
