@@ -636,21 +636,14 @@ function Trace(paramObj){
         var iDark = self.iDark;
 
             if (self.chart.illuminationStyle == 'perPixel'){
-                val = val;
-                readNoise = readNoise;
-
+                    val = val;
             }
             
             // if the chart is to be plotted with fixed illumination intensity,
             //calculate parameters related to pixel size
             if (self.chart.illuminationStyle == 'perArea'){
-                val = val
-                nPixels = (13**2)/(self.pixelSize**2);
-                if (self.type == 'scmos') {
-                    // if the camera is scmos, make the read noise stack
-                    readNoise =  self.readNoise * Math.sqrt(nPixels);
-                }
-                iDark = ( self.iDark * nPixels )
+                // set the number of photons 
+                val = val * (self.pixelSize**2) / (13**2);
             }
 
             var signal = self.qe * val;

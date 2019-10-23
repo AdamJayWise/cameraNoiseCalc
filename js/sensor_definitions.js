@@ -36,6 +36,20 @@
         "availableModels" : ['Zyla 5.5']
     },
 
+    "Zyla 5.5, 2x2 Binned" : {
+        "name" : "Zyla 5.5, 2x2 Binned",
+        "iDark" : 0.1*4,
+        "readNoise" : 1.7*2,
+        "enf" : 1,
+        "qe" : 0.6,
+        "tExp" : 1,
+        "pixelSize" : 2*13,
+        "color" : "limeGreen",
+        "dashArray" : "0",
+        "type" : "scmos",
+        "availableModels" : ['Zyla 5.5']
+    },
+
     "Zyla 4.2 Plus" : {
         "name" : "Zyla 4.2 Plus",
         "iDark" : 0.1,
@@ -45,6 +59,20 @@
         "tExp" : 1,
         "pixelSize" : 6.5,
         "color" : "orange",
+        "dashArray" : "0",
+        "type" : "scmos",
+        "availableModels" : ['Zyla 4.2 PLUS']
+    },
+
+    "Zyla 4.2 Plus, 2x2 Binned" : {
+        "name" : "Zyla 4.2 Plus, 2x2 Binned",
+        "iDark" : 4*0.1,
+        "readNoise" : 2*1.4,
+        "enf" : 1,
+        "qe" : 0.82,
+        "tExp" : 1,
+        "pixelSize" : 2*(6.5),
+        "color" : "orangeRed",
         "dashArray" : "0",
         "type" : "scmos",
         "availableModels" : ['Zyla 4.2 PLUS']
@@ -189,7 +217,23 @@
         "dashArray" : "0",
         "type" : "ccd",
         "availableModels" : ['BU','BU2','BV','BVF'],
+    },
+
+    "iVac 324 FI" : {
+        "name" : "iVac 324 FI",
+        "iDark" :  0.0028,
+        "readNoise" : 5.8,
+        "enf" : 1,
+        "qe" : 0.57,
+        "tExp" : 1,
+        "pixelSize" : 16,
+        "color" : "peru",
+        "dashArray" : "10 2 2 2",
+        "type" : "ccd",
+        "availableModels" : ['FI'],
     }
+
+
 
 
 }
