@@ -458,11 +458,11 @@ function Trace(paramObj){
                 .text( controlParams[l] + ' : ')
 
             var paramBounds = {
-                'readNoise' : [0,30],
-                'QE' : [0,1],
-                'iDark' : [0,1],
-                'enf' : [0,4],
-                'pixelSize' : [0.1,50]
+                'readNoise' : [0,1000000],
+                'qe' : [0,1],
+                'iDark' : [0,1000000],
+                'enf' : [0,100],
+                'pixelSize' : [0.0001,50000]
             }
             
             // add an input field for each value
@@ -601,12 +601,13 @@ function Trace(paramObj){
         
         legendItem.text(self.name)
         
-        if(self.lineClass){
-            legendLine.classed(self.lineClass,true);
+        // create the legend item background, styling appropriately if dashed
+        if (self.dashArray != 0){
+            legendLine.style('background','white')
+            legendLine.style('background-image', `repeating-linear-gradient( 90deg, ${self.color} 0px 4px, white 4px 8px)`);
         }
         else {
-            legendLine.classed("dashedDiv", false);
-            legendLine.style('background-color',self.color)
+            legendLine.style('background', self.color);
         }
         
         colorBadge.style('background-color', self.color);

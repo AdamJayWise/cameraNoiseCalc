@@ -15,7 +15,6 @@
         "color" : "black",
         "dashArray" : 4,
         "type" : "ccd",
-        "lineClass" : "dashedDiv",
         "availableModels" : ['Ideal'],
     },
 
@@ -45,7 +44,7 @@
         "tExp" : 1,
         "pixelSize" : 2*13,
         "color" : "limeGreen",
-        "dashArray" : "0",
+        "dashArray" : 4,
         "type" : "scmos",
         "availableModels" : ['Zyla 5.5']
     },
@@ -73,7 +72,7 @@
         "tExp" : 1,
         "pixelSize" : 2*(6.5),
         "color" : "orangeRed",
-        "dashArray" : "0",
+        "dashArray" : 4,
         "type" : "scmos",
         "availableModels" : ['Zyla 4.2 PLUS']
     },
@@ -117,7 +116,7 @@
         "color" : "olive",
         "dashArray" : "0",
         "type" : "emccd",
-        "availableModels" : ['BV','BVF'],
+        "availableModels" : ['BV','BVF','EX','EXF'],
     },
 
     "iXon Ultra 897" : {
@@ -131,7 +130,7 @@
         "color" : "silver",
         "dashArray" : "0",
         "type" : "emccd",
-        "availableModels" : ['BV','BVF'],
+        "availableModels" : ['BV','BVF','EX','EXF'],
     },
 
     "iXon Life 888" : {
@@ -206,7 +205,7 @@
     },
 
     "Idus DU420A-BU/BV" : {
-        "name" : "Idus DU420A",
+        "name" : "Idus DU420A BU/BV",
         "iDark" : 0.002,
         "readNoise" : 6,
         "enf" : 1,
@@ -216,7 +215,35 @@
         "color" : "lightCoral",
         "dashArray" : "0",
         "type" : "ccd",
-        "availableModels" : ['BU','BU2','BV','BVF'],
+        "availableModels" : ['BU','BU2','BVF'],
+    },
+
+    "Idus DU420A-OE" : {
+        "name" : "Idus DU420A-OE",
+        "iDark" : 0.0004,
+        "readNoise" : 4,
+        "enf" : 1,
+        "qe" : 0.59,
+        "tExp" : 1,
+        "pixelSize" : 26,
+        "color" : "DarkSalmon",
+        "dashArray" : "2",
+        "type" : "ccd",
+        "availableModels" : ['OE'],
+    },
+
+    "iVac 316 LDC-DD" : {
+        "name" : "iVac 324 FI",
+        "iDark" :  0.033,
+        "readNoise" : 6.0,
+        "enf" : 1,
+        "qe" : 0.95,
+        "tExp" : 1,
+        "pixelSize" : 15,
+        "color" : "peru",
+        "dashArray" : "1",
+        "type" : "ccd",
+        "availableModels" : ['LDC-DD'],
     },
 
     "iVac 324 FI" : {
@@ -231,10 +258,69 @@
         "dashArray" : "0",
         "type" : "ccd",
         "availableModels" : ['FI'],
-    }
+    },
+
+    "iDus DV416A-LDC-DD" : {
+        "name" : "iDus DV416A-LDC-DD",
+        "iDark" :  0.025,
+        "readNoise" : 4,
+        "enf" : 1,
+        "qe" : 0.95,
+        "tExp" : 1,
+        "pixelSize" : 15,
+        "color" : "MediumSlateBlue",
+        "dashArray" : "0",
+        "type" : "ccd",
+        "availableModels" : ['LDC-DD'],
+    },
+    
+    "iDus DU416A-LDC-DD" : {
+        "name" : "iDus DU416A-LDC-DD",
+        "iDark" :  0.0006,
+        "readNoise" : 4,
+        "enf" : 1,
+        "qe" : 0.95,
+        "tExp" : 1,
+        "pixelSize" : 15,
+        "color" : "MediumSlateBlue",
+        "dashArray" : "2",
+        "type" : "ccd",
+        "availableModels" : ['LDC-DD'],
+    },
+
+    "iKon-M DU934" : {
+        "name" : "iKon-M DU934",
+        "iDark" :  0.00012,
+        "readNoise" : 2.9,
+        "enf" : 1,
+        "qe" : 0.95,
+        "tExp" : 1,
+        "pixelSize" : 13,
+        "color" : "LightSlateGray",
+        "dashArray" : "0",
+        "type" : "ccd",
+        "availableModels" : ['BU', 'BV', 'FI'],
+    },
+
+    "iKon-M DU934 (Deep Depletion)" : {
+        "name" : "iKon-M DU934 (DD)",
+        "iDark" :  0.00047,
+        "readNoise" : 3.3,
+        "enf" : 1,
+        "qe" : 0.95,
+        "tExp" : 1,
+        "pixelSize" : 13,
+        "color" : "LightSlateGray",
+        "dashArray" : "4",
+        "type" : "ccd",
+        "availableModels" : ['BR-DD','BEX2-DD'],
+    },
 
 
 
+
+
+    
 
 }
 
