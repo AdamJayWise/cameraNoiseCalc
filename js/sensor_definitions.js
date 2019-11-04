@@ -232,8 +232,8 @@
         "availableModels" : ['Neo 5.5'],
     },
 
-    "Idus DU420A-BU/BV" : {
-        "name" : "Idus DU420A BU/BV",
+    "iDus DU420A-BU/BV" : {
+        "name" : "iDus DU420A BU/BV",
         "iDark" : 0.002,
         "readNoise" : 6,
         "enf" : 1,
@@ -246,8 +246,8 @@
         "availableModels" : ['BU','BU2','BVF'],
     },
 
-    "Idus DU420A-OE" : {
-        "name" : "Idus DU420A-OE",
+    "iDus DU420A-OE" : {
+        "name" : "iDus DU420A-OE",
         "iDark" : 0.0004,
         "readNoise" : 4,
         "enf" : 1,
