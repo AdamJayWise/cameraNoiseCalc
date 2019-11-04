@@ -91,18 +91,46 @@
         "availableModels" : ['BV','BVF','FI'],
     },
 
-    "Newton DU9x0 CCD" : {
-        "name" : "Newton DU940P CCD",
-        "iDark" : 0.00001,
+    "Newton DU920P" : {
+        "name" : "Newton DU920P",
+        "iDark" : 0.0002,
+        "readNoise" : 4,
+        "enf" : 1,
+        "qe" : 0.95,
+        "tExp" : 1,
+        "pixelSize" : 26,
+        "color" : "red",
+        "dashArray" : "0",
+        "type" : "ccd",
+        "availableModels" : ['BU','BU2','BVF','OE'],
+    },
+
+    "Newton DU920P Bx-DD" : {
+        "name" : "Newton DU920P Bx-DD",
+        "iDark" : 0.003,
+        "readNoise" : 4,
+        "enf" : 1,
+        "qe" : 0.95,
+        "tExp" : 1,
+        "pixelSize" : 26,
+        "color" : "red",
+        "dashArray" : 2,
+        "type" : "ccd",
+        "availableModels" : ['BR-DD','BEX2-DD'],
+    },
+
+    "Newton DU940P" : {
+        "name" : "Newton DU940P",
+        "iDark" : 0.0001,
         "readNoise" : 2.5,
         "enf" : 1,
         "qe" : 0.95,
         "tExp" : 1,
         "pixelSize" : 13.5,
-        "color" : "red",
-        "dashArray" : "0",
+        "color" : "darkRed",
+        "dashArray" : 0,
         "type" : "ccd",
-        "availableModels" : ['BU','BU2','BVF','FI','OE','UV','BR-DD','BEX2-DD'],
+        "availableModels" : ['BU','BU2','BV','FI','UV'],
     },
 
     "iXon Ultra 888" : {
