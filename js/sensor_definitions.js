@@ -344,6 +344,64 @@
         "availableModels" : ['BR-DD','BEX2-DD'],
     },
 
+    "iKon-L 936" : {
+        "name" : "iKon-L 936",
+        "iDark" :  0.000059,
+        "readNoise" : 2.9,
+        "enf" : 1,
+        "qe" : 0.95,
+        "tExp" : 1,
+        "pixelSize" : 13.5,
+        "color" : "Orange",
+        "dashArray" : "0",
+        "type" : "ccd",
+        "availableModels" : ['BV', 'BU2', 'FI'],
+    },
+
+    "iKon-L 936 (Deep Depletion)" : {
+        "name" : "iKon-L 936 (DD)",
+        "iDark" :  0.0003,
+        "readNoise" : 8.7,
+        "enf" : 1,
+        "qe" : 0.95,
+        "tExp" : 1,
+        "pixelSize" : 13.5,
+        "color" : "Orange",
+        "dashArray" : "4 2",
+        "type" : "ccd",
+        "availableModels" : ['BR-DD','BEX2-DD'],
+    },
+
+    "iKon-XL 230" : {
+        "name" : "iKon-XL 230",
+        "iDark" :  0.00006,
+        "readNoise" : 3.8,
+        "enf" : 1,
+        "qe" : 0.95,
+        "tExp" : 1,
+        "pixelSize" : 15,
+        "color" : "palevioletred",
+        "dashArray" : "0",
+        "type" : "ccd",
+        "availableModels" : ['BV', 'BB'],
+    },
+
+    "iKon-XL 231" : {
+        "name" : "iKon-XL 231",
+        "iDark" :  0.00013,
+        "readNoise" : 2.1,
+        "enf" : 1,
+        "qe" : 0.95,
+        "tExp" : 1,
+        "pixelSize" : 15,
+        "color" : "palevioletred",
+        "dashArray" : "4",
+        "type" : "ccd",
+        "availableModels" : ['BV', 'BB', 'BEX2', 'BEX2-DD', 'BR-DD'],
+    },
+
+
+
 
 
 
