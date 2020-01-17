@@ -361,7 +361,7 @@
     "iKon-L 936 (Deep Depletion)" : {
         "name" : "iKon-L 936 (DD)",
         "iDark" :  0.0003,
-        "readNoise" : 8.7,
+        "readNoise" : 2.9,
         "enf" : 1,
         "qe" : 0.95,
         "tExp" : 1,
