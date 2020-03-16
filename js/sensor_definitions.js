@@ -203,6 +203,21 @@
         "availableModels" : ['Sona'],
     },
 
+    "Sona 4.2B-6" : {
+        "name" : "Sona 4.2B-6",
+        "iDark" : 0.1,
+        "readNoise" : 1.6,
+        "enf" : 1,
+        "qe" : 0.95,
+        "tExp" : 1,
+        "pixelSize" : 6.5,
+        "color" : "purple",
+        "dashArray" : "2",
+        "type" : "scmos",
+        "availableModels" : ['Sona'],
+    },
+
+
     "Marana 4.2B-11" : {
         "name" : "Marana 4.2B-11",
         "iDark" : 0.4,
@@ -401,12 +416,27 @@
     },
 
 
+  /*
+
+    "CoolSNAP HQ" : {
+        "name" : "CoolSNAP HQ",
+        "iDark" :  0.05,
+        "readNoise" : 6,
+        "enf" : 1,
+        "qe" : 0.95,
+        "tExp" : 1,
+        "pixelSize" : 6.45,
+        "color" : "blue",
+        "dashArray" : "4",
+        "type" : "ccd",
+        "availableModels" : ['coolsnap'],
+    },
+
+
+**/
 
 
 
-
-
-    
 
 }
 
