@@ -192,7 +192,7 @@
     "Sona 4.2B-11" : {
         "name" : "Sona 4.2B-11",
         "iDark" : 0.4,
-        "readNoise" : 1.8,
+        "readNoise" : 1.6,
         "enf" : 1,
         "qe" : 0.95,
         "tExp" : 1,
@@ -206,7 +206,7 @@
     "Sona 4.2B-6" : {
         "name" : "Sona 4.2B-6",
         "iDark" : 0.1,
-        "readNoise" : 1.6,
+        "readNoise" : 1.4,
         "enf" : 1,
         "qe" : 0.95,
         "tExp" : 1,
@@ -221,7 +221,7 @@
     "Marana 4.2B-11" : {
         "name" : "Marana 4.2B-11",
         "iDark" : 0.4,
-        "readNoise" : 1.8,
+        "readNoise" : 1.6,
         "enf" : 1,
         "qe" : 0.95,
         "tExp" : 1,
