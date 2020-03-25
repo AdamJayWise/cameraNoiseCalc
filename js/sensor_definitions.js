@@ -247,7 +247,7 @@
         "availableModels" : ['Neo 5.5'],
     },
 
-    "iDus DU420A-BU/BV" : {
+    "iDus DU420A BU/BV" : {
         "name" : "iDus DU420A BU/BV",
         "iDark" : 0.002,
         "readNoise" : 6,
@@ -261,8 +261,8 @@
         "availableModels" : ['BU','BU2','BVF'],
     },
 
-    "iDus DU420A-OE" : {
-        "name" : "iDus DU420A-OE",
+    "iDus DU420A OE" : {
+        "name" : "iDus DU420A OE",
         "iDark" : 0.0004,
         "readNoise" : 4,
         "enf" : 1,
@@ -273,6 +273,20 @@
         "dashArray" : "2",
         "type" : "ccd",
         "availableModels" : ['OE'],
+    },
+
+    "iDus DU420A Bx-DD" : {
+        "name" : "iDus DU420A Bx-DD",
+        "iDark" : 0.008,
+        "readNoise" : 4,
+        "enf" : 1,
+        "qe" : 0.59,
+        "tExp" : 1,
+        "pixelSize" : 26,
+        "color" : "indianRed",
+        "dashArray" : "4",
+        "type" : "ccd",
+        "availableModels" : ['BR-DD','BEX2-DD'],
     },
 
     "iVac 316 LDC-DD" : {
