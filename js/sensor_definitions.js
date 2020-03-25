@@ -18,8 +18,8 @@
         "availableModels" : ['Ideal'],
     },
 
-    "-- Andor --": {
-    },
+    //"-- Andor --": {
+    //},
 
     "Zyla 5.5" : {
         "name" : "Zyla 5.5",

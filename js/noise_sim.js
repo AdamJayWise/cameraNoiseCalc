@@ -1,7 +1,17 @@
 console.log('Noise Sim')
 
 // sensorChoices is an object read in from a separate js file... I could have planned this better
-var sensorChoices = Object.keys(sensorDefinitions);
+var sensorChoices = Object.keys(sensorDefinitions).sort(function(a,b){
+    if (a.toUpperCase() > b.toUpperCase()){
+        return 1
+    }
+    if (a.toUpperCase() < b.toUpperCase()){
+        return -1
+    }
+    if (a.toUpperCase() == b.toUpperCase()){
+        return 0
+    }
+});
 
 // all sub-models of camera, could be useful
 allModels = Object.keys(models);
