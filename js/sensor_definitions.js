@@ -42,7 +42,7 @@
         "enf" : 1,
         "qe" : 0.6,
         "tExp" : 1,
-        "pixelSize" : 2*13,
+        "pixelSize" : 13,
         "color" : "limeGreen",
         "dashArray" : 4,
         "type" : "scmos",
@@ -56,7 +56,7 @@
         "enf" : 1,
         "qe" : 0.82,
         "tExp" : 1,
-        "pixelSize" : 6.5,
+        "pixelSize" : 2*(6.5),
         "color" : "orange",
         "dashArray" : "0",
         "type" : "scmos",
@@ -203,10 +203,10 @@
         "availableModels" : ['Sona'],
     },
 
-    "Sona 4.2B-6" : {
-        "name" : "Sona 4.2B-6",
+    "Sona 4.2B-6 (Low Noise Mode)" : {
+        "name" : "Sona 4.2B-6 (Low Noise Mode)",
         "iDark" : 0.1,
-        "readNoise" : 1.4,
+        "readNoise" : 1.29,
         "enf" : 1,
         "qe" : 0.95,
         "tExp" : 1,
