@@ -56,7 +56,7 @@
         "enf" : 1,
         "qe" : 0.82,
         "tExp" : 1,
-        "pixelSize" : 2*(6.5),
+        "pixelSize" : 6.5,
         "color" : "orange",
         "dashArray" : "0",
         "type" : "scmos",
