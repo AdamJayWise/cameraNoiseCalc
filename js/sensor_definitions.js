@@ -77,7 +77,7 @@
         "availableModels" : ['Zyla 4.2 PLUS']
     },
 
-    "Newton 971P EMCCD" : {
+    "Newton 970P EMCCD" : {
         "name" : "Newton 970 EMCCD",
         "iDark" : 0.0007,
         "readNoise" : 0.008,
@@ -88,7 +88,21 @@
         "color" : "blue",
         "dashArray" : "0",
         "type" : "emccd",
-        "availableModels" : ['BV','BVF','FI'],
+        "availableModels" : ['BV','BVF','FI', 'UVB'],
+    },
+
+    "Newton 971P EMCCD" : {
+        "name" : "Newton 971 EMCCD",
+        "iDark" : 0.0007,
+        "readNoise" : 0.008,
+        "enf" : 1.41,
+        "qe" : 0.95,
+        "tExp" : 1,
+        "pixelSize" : 16,
+        "color" : "blue",
+        "dashArray" : "2",
+        "type" : "emccd",
+        "availableModels" : ['BV','BVF','FI', 'UVB'],
     },
 
     "Newton DU920P" : {
@@ -144,7 +158,7 @@
         "color" : "olive",
         "dashArray" : "0",
         "type" : "emccd",
-        "availableModels" : ['BV','BVF','EX','EXF'],
+        "availableModels" : ['BV','BVF','EX','EXF', 'UVB'],
     },
 
     "iXon Ultra 897" : {
@@ -158,7 +172,7 @@
         "color" : "silver",
         "dashArray" : "0",
         "type" : "emccd",
-        "availableModels" : ['BV','BVF','EX','EXF'],
+        "availableModels" : ['BV','BVF','EX','EXF', 'UVB'],
     },
 
     "iXon Life 888" : {
