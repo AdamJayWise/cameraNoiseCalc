@@ -120,7 +120,7 @@
     },
 
     "Newton DU920P Bx-DD" : {
-        "name" : "Newton DU920P Bx-DD",
+        "name" : "Newton DU920P B*-DD",
         "iDark" : 0.003,
         "readNoise" : 4,
         "enf" : 1,
@@ -244,6 +244,36 @@
         "dashArray" : "0",
         "type" : "scmos",
         "availableModels" : ['Marana-TVISB','Marana-UV'],
+        
+    },
+
+    "Marana 4.2B-6" : {
+        "name" : "Marana 4.2B-6",
+        "iDark" : 0.1,
+        "readNoise" : 1.6,
+        "enf" : 1,
+        "qe" : 0.95,
+        "tExp" : 1,
+        "pixelSize" : 11,
+        "color" : "dodgerblue",
+        "dashArray" : "0",
+        "type" : "scmos",
+        "availableModels" : ['Marana-TVISB'],
+        
+    },
+
+    "Marana 4.2B-6 (Low Noise Mode)" : {
+        "name" : "Marana 4.2B-6 (Low Noise Mode)",
+        "iDark" : 0.1,
+        "readNoise" : 1.2,
+        "enf" : 1,
+        "qe" : 0.95,
+        "tExp" : 1,
+        "pixelSize" : 11,
+        "color" : "dodgerblue",
+        "dashArray" : "3 3",
+        "type" : "scmos",
+        "availableModels" : ['Marana-TVISB'],
         
     },
 
