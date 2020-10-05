@@ -77,7 +77,7 @@
         "availableModels" : ['Zyla 4.2 PLUS']
     },
 
-    "Newton 970P EMCCD" : {
+    "Newton 970 EMCCD" : {
         "name" : "Newton 970 EMCCD",
         "iDark" : 0.0007,
         "readNoise" : 0.008,
@@ -91,7 +91,7 @@
         "availableModels" : ['BV','BVF','FI', 'UVB'],
     },
 
-    "Newton 971P EMCCD" : {
+    "Newton 971 EMCCD" : {
         "name" : "Newton 971 EMCCD",
         "iDark" : 0.0007,
         "readNoise" : 0.008,
@@ -105,8 +105,8 @@
         "availableModels" : ['BV','BVF','FI', 'UVB'],
     },
 
-    "Newton DU920P" : {
-        "name" : "Newton DU920P",
+    "Newton 920" : {
+        "name" : "Newton 920",
         "iDark" : 0.0002,
         "readNoise" : 4,
         "enf" : 1,
@@ -119,8 +119,8 @@
         "availableModels" : ['BU','BU2','BVF','OE'],
     },
 
-    "Newton DU920P Bx-DD" : {
-        "name" : "Newton DU920P B*-DD",
+    "Newton DU920 (Deep Depletion)" : {
+        "name" : "Newton DU920P (Deep Depletion)",
         "iDark" : 0.003,
         "readNoise" : 4,
         "enf" : 1,
@@ -133,8 +133,8 @@
         "availableModels" : ['BR-DD','BEX2-DD'],
     },
 
-    "Newton DU940P" : {
-        "name" : "Newton DU940P",
+    "Newton 940" : {
+        "name" : "Newton DU940",
         "iDark" : 0.0001,
         "readNoise" : 2.5,
         "enf" : 1,
@@ -158,7 +158,7 @@
         "color" : "olive",
         "dashArray" : "0",
         "type" : "emccd",
-        "availableModels" : ['BV','BVF','EX','EXF', 'UVB'],
+        "availableModels" : ['BV','BVF','EX','EXF','BB (iXon)','UVB'],
     },
 
     "iXon Ultra 897" : {
@@ -172,7 +172,7 @@
         "color" : "silver",
         "dashArray" : "0",
         "type" : "emccd",
-        "availableModels" : ['BV','BVF','EX','EXF', 'UVB'],
+        "availableModels" : ['BV','BVF','EX','EXF', 'BB (iXon)', 'UVB'],
     },
 
     "iXon Life 888" : {
@@ -254,7 +254,7 @@
         "enf" : 1,
         "qe" : 0.95,
         "tExp" : 1,
-        "pixelSize" : 11,
+        "pixelSize" : 6.5,
         "color" : "dodgerblue",
         "dashArray" : "0",
         "type" : "scmos",
@@ -269,7 +269,7 @@
         "enf" : 1,
         "qe" : 0.95,
         "tExp" : 1,
-        "pixelSize" : 11,
+        "pixelSize" : 6.5,
         "color" : "dodgerblue",
         "dashArray" : "3 3",
         "type" : "scmos",
@@ -319,8 +319,8 @@
         "availableModels" : ['OE'],
     },
 
-    "iDus DU420A Bx-DD" : {
-        "name" : "iDus DU420A Bx-DD",
+    "iDus DU420A (Deep Depletion)" : {
+        "name" : "iDus DU420A (Deep Depletion)",
         "iDark" : 0.008,
         "readNoise" : 4,
         "enf" : 1,
@@ -404,7 +404,7 @@
     },
 
     "iKon-M DU934 (Deep Depletion)" : {
-        "name" : "iKon-M DU934 (DD)",
+        "name" : "iKon-M DU934 (Deep Depletion)",
         "iDark" :  0.00047,
         "readNoise" : 3.3,
         "enf" : 1,
@@ -432,7 +432,7 @@
     },
 
     "iKon-L 936 (Deep Depletion)" : {
-        "name" : "iKon-L 936 (DD)",
+        "name" : "iKon-L 936 (Deep Depletion)",
         "iDark" :  0.0003,
         "readNoise" : 2.9,
         "enf" : 1,
@@ -456,7 +456,7 @@
         "color" : "palevioletred",
         "dashArray" : "0",
         "type" : "ccd",
-        "availableModels" : ['BV', 'BB'],
+        "availableModels" : ['BV', 'BB (iKon-XL)'],
     },
 
     "iKon-XL 231" : {
@@ -470,7 +470,7 @@
         "color" : "palevioletred",
         "dashArray" : "4",
         "type" : "ccd",
-        "availableModels" : ['BV', 'BB', 'BEX2', 'BEX2-DD', 'BR-DD'],
+        "availableModels" : ['BV', 'BB (iKon-XL)', 'BEX2', 'BEX2-DD', 'BR-DD'],
     },
 
 
